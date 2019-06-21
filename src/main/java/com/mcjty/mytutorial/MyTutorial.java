@@ -2,6 +2,7 @@ package com.mcjty.mytutorial;
 
 import com.mcjty.mytutorial.blocks.FirstBlock;
 import com.mcjty.mytutorial.blocks.ModBlocks;
+import com.mcjty.mytutorial.items.FirstItem;
 import com.mcjty.mytutorial.setup.ClientProxy;
 import com.mcjty.mytutorial.setup.IProxy;
 import com.mcjty.mytutorial.setup.ModSetup;
@@ -52,6 +53,7 @@ public class MyTutorial {
             Item.Properties properties = new Item.Properties()
                     .group(setup.itemGroup);
             event.getRegistry().register(new BlockItem(ModBlocks.FIRSTBLOCK, properties).setRegistryName("firstblock"));
+            event.getRegistry().register(new FirstItem());
         }
     }
 }

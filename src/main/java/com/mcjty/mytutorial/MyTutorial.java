@@ -1,6 +1,7 @@
 package com.mcjty.mytutorial;
 
 import com.mcjty.mytutorial.blocks.FirstBlock;
+import com.mcjty.mytutorial.blocks.FirstBlockTile;
 import com.mcjty.mytutorial.blocks.ModBlocks;
 import com.mcjty.mytutorial.items.FirstItem;
 import com.mcjty.mytutorial.setup.ClientProxy;
@@ -10,6 +11,7 @@ import com.mcjty.mytutorial.setup.ServerProxy;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -54,6 +56,11 @@ public class MyTutorial {
                     .group(setup.itemGroup);
             event.getRegistry().register(new BlockItem(ModBlocks.FIRSTBLOCK, properties).setRegistryName("firstblock"));
             event.getRegistry().register(new FirstItem());
+        }
+
+        @SubscribeEvent
+        public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> event) {
+            event.getRegistry().register(TileEntityType.Builder.create(FirstBlockTile::new, ModBlocks.FIRSTBLOCK).build(null).setRegistryName("firstblock"));
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.mcjty.mytutorial;
 
 import com.mcjty.mytutorial.blocks.FirstBlock;
+import com.mcjty.mytutorial.blocks.FirstBlockContainer;
 import com.mcjty.mytutorial.blocks.FirstBlockTile;
 import com.mcjty.mytutorial.blocks.ModBlocks;
 import com.mcjty.mytutorial.items.FirstItem;
@@ -9,9 +10,12 @@ import com.mcjty.mytutorial.setup.IProxy;
 import com.mcjty.mytutorial.setup.ModSetup;
 import com.mcjty.mytutorial.setup.ServerProxy;
 import net.minecraft.block.Block;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -63,6 +67,14 @@ public class MyTutorial {
         @SubscribeEvent
         public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> event) {
             event.getRegistry().register(TileEntityType.Builder.create(FirstBlockTile::new, ModBlocks.FIRSTBLOCK).build(null).setRegistryName("firstblock"));
+        }
+
+        @SubscribeEvent
+        public static void onContainerRegistry(final RegistryEvent.Register<ContainerType<?>> event) {
+            event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) -> {
+                BlockPos pos = data.readBlockPos();
+                return new FirstBlockContainer(windowId, MyTutorial.proxy.getClientWorld(), pos, inv, MyTutorial.proxy.getClientPlayer());
+            }).setRegistryName("firstblock"));
         }
     }
 }

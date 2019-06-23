@@ -25,6 +25,8 @@ import org.apache.logging.log4j.Logger;
 @Mod("mytutorial")
 public class MyTutorial {
 
+    public static final String MODID = "mytutorial";
+
     public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
     public static ModSetup setup = new ModSetup();

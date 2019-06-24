@@ -8,7 +8,6 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -18,7 +17,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -62,7 +60,8 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
     public void read(CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound("inv");
         handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(invTag));
-        energy.ifPresent(h -> ((CustomEnergyStorage)h).setEnergy(invTag.getInt("energy")));
+        CompoundNBT energyTag = tag.getCompound("energy");
+        energy.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(energyTag));
         super.read(tag);
     }
 
@@ -72,7 +71,10 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
             CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
             tag.put("inv", compound);
         });
-        energy.ifPresent(h -> tag.putInt("energy", h.getEnergyStored()));
+        energy.ifPresent(h -> {
+            CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
+            tag.put("energy", compound);
+        });
         return super.write(tag);
     }
 

@@ -84,6 +84,12 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
 
     private IItemHandler createHandler() {
         return new ItemStackHandler(1) {
+
+            @Override
+            protected void onContentsChanged(int slot) {
+                markDirty();
+            }
+
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
                 return stack.getItem() == Items.DIAMOND;

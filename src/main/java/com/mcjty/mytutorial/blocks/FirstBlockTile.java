@@ -1,5 +1,6 @@
 package com.mcjty.mytutorial.blocks;
 
+import com.mcjty.mytutorial.Config;
 import com.mcjty.mytutorial.tools.CustomEnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -45,7 +46,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
         if (counter > 0) {
             counter--;
             if (counter <= 0) {
-                energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(1000));
+                energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(Config.FIRSTBLOCK_GENERATE.get()));
             }
             markDirty();
         } else {
@@ -53,7 +54,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
                 ItemStack stack = h.getStackInSlot(0);
                 if (stack.getItem() == Items.DIAMOND) {
                     h.extractItem(0, 1, false);
-                    counter = 20;
+                    counter = Config.FIRSTBLOCK_TICKS.get();
                     markDirty();
                 }
             });
@@ -71,7 +72,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
                     if (te != null) {
                         boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
                                     if (handler.canReceive()) {
-                                        int received = handler.receiveEnergy(Math.min(capacity.get(), 100), false);
+                                        int received = handler.receiveEnergy(Math.min(capacity.get(), Config.FIRSTBLOCK_SEND.get()), false);
                                         capacity.addAndGet(-received);
                                         ((CustomEnergyStorage) energy).consumeEnergy(received);
                                         markDirty();
@@ -141,7 +142,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
     }
 
     private IEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(100000, 0);
+        return new CustomEnergyStorage(Config.FIRSTBLOCK_MAXPOWER.get(), 0);
     }
 
     @Nonnull

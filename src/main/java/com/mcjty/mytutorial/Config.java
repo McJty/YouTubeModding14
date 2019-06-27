@@ -9,8 +9,6 @@ import net.minecraftforge.fml.config.ModConfig;
 
 import java.nio.file.Path;
 
-import static net.minecraftforge.fml.Logging.CORE;
-
 @Mod.EventBusSubscriber
 public class Config {
 

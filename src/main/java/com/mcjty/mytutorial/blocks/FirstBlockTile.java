@@ -2,6 +2,7 @@ package com.mcjty.mytutorial.blocks;
 
 import com.mcjty.mytutorial.Config;
 import com.mcjty.mytutorial.tools.CustomEnergyStorage;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -9,6 +10,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -43,13 +45,19 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
 
     @Override
     public void tick() {
+        if (world.isRemote) {
+            return;
+        }
+
         if (counter > 0) {
             counter--;
             if (counter <= 0) {
                 energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(Config.FIRSTBLOCK_GENERATE.get()));
             }
             markDirty();
-        } else {
+        }
+
+        if (counter <= 0) {
             handler.ifPresent(h -> {
                 ItemStack stack = h.getStackInSlot(0);
                 if (stack.getItem() == Items.DIAMOND) {
@@ -58,6 +66,11 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
                     markDirty();
                 }
             });
+        }
+
+        BlockState blockState = world.getBlockState(pos);
+        if (blockState.get(BlockStateProperties.POWERED) != counter > 0) {
+            world.setBlockState(pos, blockState.with(BlockStateProperties.POWERED, counter > 0), 3);
         }
 
         sendOutPower();

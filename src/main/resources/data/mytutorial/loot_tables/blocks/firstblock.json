@@ -2,7 +2,7 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "pool1",
+      "name": "firstblock",
       "rolls": 1,
       "entries": [
         {
@@ -39,11 +39,6 @@
             }
           ],
           "name": "mytutorial:firstblock"
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
         }
       ]
     }

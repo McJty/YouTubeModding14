@@ -38,7 +38,7 @@ public class FirstBlockContainer extends Container {
         });
         layoutPlayerInventorySlots(10, 70);
 
-        func_216958_a(new IntReferenceHolder() {
+        trackInt(new IntReferenceHolder() {
             @Override
             public int get() {
                 return getEnergy();

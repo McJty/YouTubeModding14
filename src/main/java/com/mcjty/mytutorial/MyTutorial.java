@@ -4,12 +4,16 @@ import com.mcjty.mytutorial.blocks.FirstBlock;
 import com.mcjty.mytutorial.blocks.FirstBlockContainer;
 import com.mcjty.mytutorial.blocks.FirstBlockTile;
 import com.mcjty.mytutorial.blocks.ModBlocks;
+import com.mcjty.mytutorial.entities.WeirdMobEntity;
 import com.mcjty.mytutorial.items.FirstItem;
+import com.mcjty.mytutorial.items.WeirdMobEggItem;
 import com.mcjty.mytutorial.setup.ClientProxy;
 import com.mcjty.mytutorial.setup.IProxy;
 import com.mcjty.mytutorial.setup.ModSetup;
 import com.mcjty.mytutorial.setup.ServerProxy;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -60,6 +64,7 @@ public class MyTutorial {
     // Event bus for receiving Registry Events)
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
+
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
             event.getRegistry().register(new FirstBlock());
@@ -71,6 +76,7 @@ public class MyTutorial {
                     .group(setup.itemGroup);
             event.getRegistry().register(new BlockItem(ModBlocks.FIRSTBLOCK, properties).setRegistryName("firstblock"));
             event.getRegistry().register(new FirstItem());
+            event.getRegistry().register(new WeirdMobEggItem());
         }
 
         @SubscribeEvent
@@ -84,6 +90,15 @@ public class MyTutorial {
                 BlockPos pos = data.readBlockPos();
                 return new FirstBlockContainer(windowId, MyTutorial.proxy.getClientWorld(), pos, inv, MyTutorial.proxy.getClientPlayer());
             }).setRegistryName("firstblock"));
+        }
+
+        @SubscribeEvent
+        public static void onEntityRegistry(final RegistryEvent.Register<EntityType<?>> event) {
+            event.getRegistry().register(EntityType.Builder.create(WeirdMobEntity::new, EntityClassification.CREATURE)
+                    .size(1, 1)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build("weirdmob").setRegistryName(MyTutorial.MODID, "weirdmob"));
+
         }
     }
 }

@@ -82,6 +82,7 @@ public class MyTutorial {
         @SubscribeEvent
         public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> event) {
             event.getRegistry().register(TileEntityType.Builder.create(FirstBlockTile::new, ModBlocks.FIRSTBLOCK).build(null).setRegistryName("firstblock"));
+            event.getRegistry().register(TileEntityType.Builder.create(FancyBlockTile::new, ModBlocks.FANCYBLOCK).build(null).setRegistryName("fancyblock"));
         }
 
         @SubscribeEvent

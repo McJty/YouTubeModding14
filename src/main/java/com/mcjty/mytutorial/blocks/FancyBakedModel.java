@@ -1,13 +1,12 @@
 package com.mcjty.mytutorial.blocks;
 
+import com.google.common.util.concurrent.FakeTimeLimiter;
 import com.mcjty.mytutorial.MyTutorial;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.model.ItemTransformVec3f;
+import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.Direction;
@@ -84,6 +83,18 @@ public class FancyBakedModel implements IDynamicBakedModel {
     @Nonnull
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+
+        BlockState mimic = extraData.getData(FancyBlockTile.MIMIC);
+        if (mimic != null) {
+            ModelResourceLocation location = BlockModelShapes.getModelLocation(mimic);
+            if (location != null) {
+                IBakedModel model = Minecraft.getInstance().getModelManager().getModel(location);
+                if (model != null) {
+                    return model.getQuads(mimic, side, rand, extraData);
+                }
+            }
+        }
+
         if (side != null) {
             return Collections.emptyList();
         }

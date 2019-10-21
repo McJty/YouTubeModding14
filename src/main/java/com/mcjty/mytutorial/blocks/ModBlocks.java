@@ -17,4 +17,8 @@ public class ModBlocks {
 
     @ObjectHolder("mytutorial:fancyblock")
     public static FancyBlock FANCYBLOCK;
+
+    @ObjectHolder("mytutorial:fancyblock")
+    public static TileEntityType<FancyBlockTile> FANCYBLOCK_TILE;
+
 }

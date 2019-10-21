@@ -14,4 +14,7 @@ public class ModBlocks {
 
     @ObjectHolder("mytutorial:firstblock")
     public static ContainerType<FirstBlockContainer> FIRSTBLOCK_CONTAINER;
+
+    @ObjectHolder("mytutorial:fancyblock")
+    public static FancyBlock FANCYBLOCK;
 }

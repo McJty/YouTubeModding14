@@ -1,9 +1,6 @@
 package com.mcjty.mytutorial;
 
-import com.mcjty.mytutorial.blocks.FirstBlock;
-import com.mcjty.mytutorial.blocks.FirstBlockContainer;
-import com.mcjty.mytutorial.blocks.FirstBlockTile;
-import com.mcjty.mytutorial.blocks.ModBlocks;
+import com.mcjty.mytutorial.blocks.*;
 import com.mcjty.mytutorial.entities.WeirdMobEntity;
 import com.mcjty.mytutorial.items.FirstItem;
 import com.mcjty.mytutorial.items.WeirdMobEggItem;
@@ -68,6 +65,7 @@ public class MyTutorial {
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
             event.getRegistry().register(new FirstBlock());
+            event.getRegistry().register(new FancyBlock());
         }
 
         @SubscribeEvent
@@ -75,6 +73,8 @@ public class MyTutorial {
             Item.Properties properties = new Item.Properties()
                     .group(setup.itemGroup);
             event.getRegistry().register(new BlockItem(ModBlocks.FIRSTBLOCK, properties).setRegistryName("firstblock"));
+            event.getRegistry().register(new BlockItem(ModBlocks.FANCYBLOCK, properties).setRegistryName("fancyblock"));
+
             event.getRegistry().register(new FirstItem());
             event.getRegistry().register(new WeirdMobEggItem());
         }

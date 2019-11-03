@@ -1,8 +1,10 @@
 package com.mcjty.mytutorial.setup;
 
 import com.mcjty.mytutorial.blocks.ModBlocks;
+import com.mcjty.mytutorial.network.Networking;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 public class ModSetup {
 
@@ -14,6 +16,8 @@ public class ModSetup {
     };
 
     public void init() {
-
+        MinecraftForge.EVENT_BUS.register(new ForgeEventHandlers());
+        Networking.registerMessages();
     }
+
 }

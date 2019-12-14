@@ -12,6 +12,7 @@ public class ModCommands {
         LiteralCommandNode<CommandSource> cmdTut = dispatcher.register(
                 Commands.literal(MyTutorial.MODID)
                         .then(CommandTest.register(dispatcher))
+                        .then(CommandTpDim.register(dispatcher))
                         .then(CommandSpawner.register(dispatcher))
         );
 

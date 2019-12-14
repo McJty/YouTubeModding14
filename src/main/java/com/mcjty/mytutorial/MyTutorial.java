@@ -1,6 +1,7 @@
 package com.mcjty.mytutorial;
 
 import com.mcjty.mytutorial.blocks.*;
+import com.mcjty.mytutorial.dimension.TutorialModDimension;
 import com.mcjty.mytutorial.entities.WeirdMobEntity;
 import com.mcjty.mytutorial.items.FirstItem;
 import com.mcjty.mytutorial.items.WeirdMobEggItem;
@@ -16,6 +17,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -28,6 +30,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import static com.mcjty.mytutorial.dimension.ModDimensions.DIMENSION_ID;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("mytutorial")
@@ -100,6 +104,11 @@ public class MyTutorial {
                     .setShouldReceiveVelocityUpdates(false)
                     .build("weirdmob").setRegistryName(MyTutorial.MODID, "weirdmob"));
 
+        }
+
+        @SubscribeEvent
+        public static void registerModDimensions(final RegistryEvent.Register<ModDimension> event) {
+            event.getRegistry().register(new TutorialModDimension().setRegistryName(DIMENSION_ID));
         }
     }
 }

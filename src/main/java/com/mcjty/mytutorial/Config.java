@@ -6,10 +6,11 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 import java.nio.file.Path;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(bus = Bus.MOD)
 public class Config {
 
     public static final String CATEGORY_GENERAL = "general";

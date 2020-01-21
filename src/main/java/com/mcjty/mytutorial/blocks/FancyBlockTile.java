@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-import static com.mcjty.mytutorial.blocks.ModBlocks.FANCYBLOCK_TILE;
+import static com.mcjty.mytutorial.setup.Registration.FANCYBLOCK_TILE;
 
 public class FancyBlockTile extends TileEntity {
 
@@ -25,7 +25,7 @@ public class FancyBlockTile extends TileEntity {
     private BlockState mimic;
 
     public FancyBlockTile() {
-        super(FANCYBLOCK_TILE);
+        super(FANCYBLOCK_TILE.get());
     }
 
     public void setMimic(BlockState mimic) {

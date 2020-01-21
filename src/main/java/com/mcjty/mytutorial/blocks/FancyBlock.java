@@ -22,19 +22,18 @@ import javax.annotation.Nullable;
 
 public class FancyBlock extends Block {
 
-    private final VoxelShape shape = VoxelShapes.create(.2, .2, .2, .8, .8, .8);
+    private static final VoxelShape SHAPE = VoxelShapes.create(.2, .2, .2, .8, .8, .8);
 
     public FancyBlock() {
         super(Properties.create(Material.IRON)
                 .sound(SoundType.METAL)
                 .hardnessAndResistance(2.0f)
         );
-        setRegistryName("fancyblock");
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-        return shape;
+        return SHAPE;
     }
 
     @Override

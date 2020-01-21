@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.mcjty.mytutorial.blocks.ModBlocks.FIRSTBLOCK_TILE;
+import static com.mcjty.mytutorial.setup.Registration.FIRSTBLOCK_TILE;
 
 public class FirstBlockTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
@@ -40,7 +40,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
     private int counter;
 
     public FirstBlockTile() {
-        super(FIRSTBLOCK_TILE);
+        super(FIRSTBLOCK_TILE.get());
     }
 
     @Override

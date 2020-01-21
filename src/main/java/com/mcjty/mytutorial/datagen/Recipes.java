@@ -1,6 +1,6 @@
 package com.mcjty.mytutorial.datagen;
 
-import com.mcjty.mytutorial.blocks.ModBlocks;
+import com.mcjty.mytutorial.setup.Registration;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
@@ -19,7 +19,7 @@ public class Recipes extends RecipeProvider {
 
     @Override
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
-        ShapedRecipeBuilder.shapedRecipe(ModBlocks.FIRSTBLOCK)
+        ShapedRecipeBuilder.shapedRecipe(Registration.FIRSTBLOCK.get())
                 .patternLine("xxx")
                 .patternLine("x#x")
                 .patternLine("xxx")

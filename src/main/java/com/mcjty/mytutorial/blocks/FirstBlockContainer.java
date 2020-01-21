@@ -1,5 +1,6 @@
 package com.mcjty.mytutorial.blocks;
 
+import com.mcjty.mytutorial.setup.Registration;
 import com.mcjty.mytutorial.tools.CustomEnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -19,8 +20,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-import static com.mcjty.mytutorial.blocks.ModBlocks.FIRSTBLOCK_CONTAINER;
-
 public class FirstBlockContainer extends Container {
 
     private TileEntity tileEntity;
@@ -28,7 +27,7 @@ public class FirstBlockContainer extends Container {
     private IItemHandler playerInventory;
 
     public FirstBlockContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
-        super(FIRSTBLOCK_CONTAINER, windowId);
+        super(Registration.FIRSTBLOCK_CONTAINER.get(), windowId);
         tileEntity = world.getTileEntity(pos);
         this.playerEntity = player;
         this.playerInventory = new InvWrapper(playerInventory);
@@ -57,7 +56,7 @@ public class FirstBlockContainer extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, ModBlocks.FIRSTBLOCK);
+        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, Registration.FIRSTBLOCK.get());
     }
 
     @Override

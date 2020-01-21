@@ -1,7 +1,7 @@
 package com.mcjty.mytutorial.items;
 
-import com.mcjty.mytutorial.MyTutorial;
-import com.mcjty.mytutorial.entities.ModEntities;
+import com.mcjty.mytutorial.setup.ModSetup;
+import com.mcjty.mytutorial.setup.Registration;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -24,8 +24,7 @@ public class WeirdMobEggItem extends Item {
     public WeirdMobEggItem() {
         super(new Item.Properties()
                 .maxStackSize(1)
-                .group(MyTutorial.setup.itemGroup));
-        setRegistryName("weirdmob_egg");
+                .group(ModSetup.ITEM_GROUP));
     }
 
     /**
@@ -46,7 +45,7 @@ public class WeirdMobEggItem extends Item {
                 TileEntity tileentity = world.getTileEntity(blockpos);
                 if (tileentity instanceof MobSpawnerTileEntity) {
                     AbstractSpawner abstractspawner = ((MobSpawnerTileEntity)tileentity).getSpawnerBaseLogic();
-                    abstractspawner.setEntityType(ModEntities.WEIRDMOB);
+                    abstractspawner.setEntityType(Registration.WEIRDMOB.get());
                     tileentity.markDirty();
                     world.notifyBlockUpdate(blockpos, blockstate, blockstate, 3);
                     itemstack.shrink(1);
@@ -61,7 +60,7 @@ public class WeirdMobEggItem extends Item {
                 blockpos1 = blockpos.offset(direction);
             }
 
-            if (ModEntities.WEIRDMOB.spawn(world, itemstack, context.getPlayer(), blockpos1, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP) != null) {
+            if (Registration.WEIRDMOB.get().spawn(world, itemstack, context.getPlayer(), blockpos1, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP) != null) {
                 itemstack.shrink(1);
             }
 

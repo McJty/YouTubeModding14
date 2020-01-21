@@ -1,13 +1,9 @@
 package com.mcjty.mytutorial;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-
-import java.nio.file.Path;
 
 @Mod.EventBusSubscriber
 public class Config {
@@ -16,12 +12,8 @@ public class Config {
     public static final String CATEGORY_POWER = "power";
     public static final String SUBCATEGORY_FIRSTBLOCK = "firstblock";
 
-    private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-    private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
-
     public static ForgeConfigSpec COMMON_CONFIG;
     public static ForgeConfigSpec CLIENT_CONFIG;
-
 
     public static ForgeConfigSpec.IntValue FIRSTBLOCK_MAXPOWER;
     public static ForgeConfigSpec.IntValue FIRSTBLOCK_GENERATE;
@@ -31,12 +23,15 @@ public class Config {
 
     static {
 
+        ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+        ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+
         COMMON_BUILDER.comment("General settings").push(CATEGORY_GENERAL);
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.comment("Power settings").push(CATEGORY_POWER);
 
-        setupFirstBlockConfig();
+        setupFirstBlockConfig(COMMON_BUILDER, CLIENT_BUILDER);
 
         COMMON_BUILDER.pop();
 
@@ -45,7 +40,7 @@ public class Config {
         CLIENT_CONFIG = CLIENT_BUILDER.build();
     }
 
-    private static void setupFirstBlockConfig() {
+    private static void setupFirstBlockConfig(ForgeConfigSpec.Builder COMMON_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
         COMMON_BUILDER.comment("FirstBlock settings").push(SUBCATEGORY_FIRSTBLOCK);
 
         FIRSTBLOCK_MAXPOWER = COMMON_BUILDER.comment("Maximum power for the FirstBlock generator")
@@ -58,18 +53,6 @@ public class Config {
                 .defineInRange("ticks", 20, 0, Integer.MAX_VALUE);
 
         COMMON_BUILDER.pop();
-    }
-
-    public static void loadConfig(ForgeConfigSpec spec, Path path) {
-
-        final CommentedFileConfig configData = CommentedFileConfig.builder(path)
-                .sync()
-                .autosave()
-                .writingMode(WritingMode.REPLACE)
-                .build();
-
-        configData.load();
-        spec.setConfig(configData);
     }
 
     @SubscribeEvent

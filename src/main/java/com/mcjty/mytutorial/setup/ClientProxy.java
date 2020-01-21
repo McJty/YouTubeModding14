@@ -1,22 +1,10 @@
 package com.mcjty.mytutorial.setup;
 
-import com.mcjty.mytutorial.blocks.FirstBlockScreen;
-import com.mcjty.mytutorial.blocks.ModBlocks;
-import com.mcjty.mytutorial.entities.ModEntities;
-import com.mcjty.mytutorial.entities.WeirdMobRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy implements IProxy {
-
-    @Override
-    public void init() {
-        ScreenManager.registerFactory(ModBlocks.FIRSTBLOCK_CONTAINER, FirstBlockScreen::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.WEIRDMOB, WeirdMobRenderer::new);
-    }
 
     @Override
     public World getClientWorld() {

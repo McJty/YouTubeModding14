@@ -1,6 +1,6 @@
 package com.mcjty.mytutorial.datagen;
 
-import com.mcjty.mytutorial.blocks.ModBlocks;
+import com.mcjty.mytutorial.setup.Registration;
 import net.minecraft.data.DataGenerator;
 
 public class LootTables extends BaseLootTableProvider {
@@ -11,7 +11,7 @@ public class LootTables extends BaseLootTableProvider {
 
     @Override
     protected void addTables() {
-        lootTables.put(ModBlocks.FIRSTBLOCK, createStandardTable("firstblock", ModBlocks.FIRSTBLOCK));
-        lootTables.put(ModBlocks.FANCYBLOCK, createStandardTable("fancyblock", ModBlocks.FANCYBLOCK));
+        lootTables.put(Registration.FIRSTBLOCK.get(), createStandardTable("firstblock", Registration.FIRSTBLOCK.get()));
+        lootTables.put(Registration.FANCYBLOCK.get(), createStandardTable("fancyblock", Registration.FANCYBLOCK.get()));
     }
 }

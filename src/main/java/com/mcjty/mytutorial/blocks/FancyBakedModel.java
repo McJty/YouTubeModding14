@@ -25,8 +25,10 @@ import java.util.Random;
 
 public class FancyBakedModel implements IDynamicBakedModel {
 
+    public static final ResourceLocation TEXTURE = new ResourceLocation(MyTutorial.MODID, "block/fancyblock");
+
     private TextureAtlasSprite getTexture() {
-        return Minecraft.getInstance().func_228015_a_(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(new ResourceLocation(MyTutorial.MODID, "block/fancyblock"));
+        return Minecraft.getInstance().func_228015_a_(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(TEXTURE);
     }
 
     private void putVertex(BakedQuadBuilder builder, Vec3d normal,

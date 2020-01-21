@@ -4,6 +4,7 @@ import com.mcjty.mytutorial.MyTutorial;
 import com.mcjty.mytutorial.network.Networking;
 import com.mcjty.mytutorial.network.PacketSpawn;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -46,7 +47,7 @@ public class SpawnerScreen extends Screen {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GUI);
         int relX = (this.width - WIDTH) / 2;
         int relY = (this.height - HEIGHT) / 2;

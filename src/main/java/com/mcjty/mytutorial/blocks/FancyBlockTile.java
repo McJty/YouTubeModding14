@@ -34,14 +34,20 @@ public class FancyBlockTile extends TileEntity {
         world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 
-    @Nullable
+
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT tag = new CompoundNBT();
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT tag = super.getUpdateTag();
         if (mimic != null) {
             tag.put("mimic", NBTUtil.writeBlockState(mimic));
         }
-        return new SUpdateTileEntityPacket(pos, 1, tag);
+        return tag;
+    }
+
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
     }
 
     @Override

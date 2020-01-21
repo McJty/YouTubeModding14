@@ -5,6 +5,7 @@ import com.mcjty.mytutorial.blocks.FancyBakedModel;
 import com.mcjty.mytutorial.blocks.ModBlocks;
 import com.mcjty.mytutorial.items.ModItems;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,7 +25,7 @@ public class ClientRegistration {
 
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().getBasePath().equals("textures")) {
+        if (!event.getMap().func_229223_g_().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
             return;
         }
         event.addSprite(new ResourceLocation(MyTutorial.MODID, "block/fancyblock"));
@@ -32,9 +33,9 @@ public class ClientRegistration {
 
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent event) {
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.FANCYBLOCK.getRegistryName(), ""),
-                new FancyBakedModel(DefaultVertexFormats.BLOCK));
-        event.getModelRegistry().put(new ModelResourceLocation(ModBlocks.FANCYBLOCK.getRegistryName(), "inventory"),
-                new FancyBakedModel(DefaultVertexFormats.ITEM));
+        event.getModelRegistry().put(new ModelResourceLocation(new ResourceLocation(MyTutorial.MODID, "fancyblock"), ""),
+                new FancyBakedModel());
+        event.getModelRegistry().put(new ModelResourceLocation(new ResourceLocation(MyTutorial.MODID, "fancyblock"), "inventory"),
+                new FancyBakedModel());
     }
 }

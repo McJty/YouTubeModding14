@@ -39,7 +39,7 @@ public class PacketSpawn {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerWorld spawnWorld = ctx.get().getSender().world.getServer().getWorld(type);
+            ServerWorld spawnWorld = ctx.get().getSender().world.getServer().func_71218_a(type);
             EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(id));
             if (entityType == null) {
                 throw new IllegalStateException("This cannot happen! Unknown id '" + id + "'!");

@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 public class TutorialDimension extends Dimension {
 
     public TutorialDimension(World world, DimensionType type) {
-        super(world, type);
+        super(world, type, 0.0f);
     }
 
     @Override

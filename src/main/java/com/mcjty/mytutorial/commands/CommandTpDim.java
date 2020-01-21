@@ -26,10 +26,12 @@ public class CommandTpDim implements Command<CommandSource> {
     @Override
     public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
+        int x = player.getPosition().getX();
+        int z = player.getPosition().getZ();
         if (player.dimension.equals(ModDimensions.DIMENSION_TYPE)) {
-            TeleportationTools.teleport(player, DimensionType.OVERWORLD, new BlockPos(player.posX, 200, player.posZ));
+            TeleportationTools.teleport(player, DimensionType.OVERWORLD, new BlockPos(x, 200, z));
         } else {
-            TeleportationTools.teleport(player, ModDimensions.DIMENSION_TYPE, new BlockPos(player.posX, 200, player.posZ));
+            TeleportationTools.teleport(player, ModDimensions.DIMENSION_TYPE, new BlockPos(x, 200, z));
         }
         return 0;
     }

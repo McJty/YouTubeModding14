@@ -6,6 +6,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldInfo;
@@ -23,20 +24,21 @@ public class TeleportationTools {
             return null;
         }
         DimensionType source = entity.dimension;
-        ServerWorld originalWorld = entity.server.getWorld(source);
+        ServerWorld originalWorld = entity.server.func_71218_a(source);
         entity.dimension = destination;
-        ServerWorld destinationWorld = entity.server.getWorld(destination);
+        ServerWorld destinationWorld = entity.server.func_71218_a(destination);
         WorldInfo worldinfo = entity.world.getWorldInfo();
         net.minecraftforge.fml.network.NetworkHooks.sendDimensionDataPacket(entity.connection.netManager, entity);
-        entity.connection.sendPacket(new SRespawnPacket(destination, worldinfo.getGenerator(), entity.interactionManager.getGameType()));
+        entity.connection.sendPacket(new SRespawnPacket(destination, WorldInfo.func_227498_c_(worldinfo.getSeed()), worldinfo.getGenerator(), entity.interactionManager.getGameType()));
         entity.connection.sendPacket(new SServerDifficultyPacket(worldinfo.getDifficulty(), worldinfo.isDifficultyLocked()));
         PlayerList playerlist = entity.server.getPlayerList();
         playerlist.updatePermissionLevel(entity);
         originalWorld.removeEntity(entity, true); //Forge: the player entity is moved to the new world, NOT cloned. So keep the data alive with no matching invalidate call.
         entity.revive();
-        double d0 = entity.posX;
-        double d1 = entity.posY;
-        double d2 = entity.posZ;
+        Vec3d vec = entity.getPositionVec();
+        double d0 = vec.x;
+        double d1 = vec.y;
+        double d2 = vec.z;
         float f = entity.rotationPitch;
         float f1 = entity.rotationYaw;
         double d3 = 8.0D;
@@ -63,10 +65,11 @@ public class TeleportationTools {
         originalWorld.getProfiler().endSection();
         entity.setWorld(destinationWorld);
         destinationWorld.func_217447_b(entity);
-        entity.connection.setPlayerLocation(entity.posX, entity.posY, entity.posZ, f1, f);
-        entity.interactionManager.setWorld(destinationWorld);
+        vec = entity.getPositionVec();
+        entity.connection.setPlayerLocation(vec.x, vec.y, vec.z, f1, f);
+        entity.interactionManager.world = destinationWorld;
         entity.connection.sendPacket(new SPlayerAbilitiesPacket(entity.abilities));
-        playerlist.sendWorldInfo(entity, destinationWorld);
+        playerlist.func_72354_b(entity, destinationWorld);
         playerlist.sendInventory(entity);
 
         for (EffectInstance effectinstance : entity.getActivePotionEffects()) {

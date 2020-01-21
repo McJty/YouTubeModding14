@@ -1,14 +1,15 @@
 package com.mcjty.mytutorial.dimension;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.feature.structure.Structure;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class TutorialBiomeProvider extends BiomeProvider {
 
@@ -16,35 +17,18 @@ public class TutorialBiomeProvider extends BiomeProvider {
     private static final List<Biome> SPAWN = Collections.singletonList(Biomes.PLAINS);
 
     public TutorialBiomeProvider() {
+        super(new HashSet<>(SPAWN));
         biome = Biomes.PLAINS;
     }
 
     @Override
-    public Biome getBiome(int x, int y) {
+    public Biome func_225526_b_(int x, int y, int z) {
         return biome;
     }
 
     @Override
     public List<Biome> getBiomesToSpawnIn() {
         return SPAWN;
-    }
-
-    @Override
-    public Biome[] getBiomes(int x, int y, int width, int height, boolean b) {
-        Biome[] biomes = new Biome[width * height];
-        Arrays.fill(biomes, biome);
-        return biomes;
-    }
-
-    @Override
-    public Set<Biome> getBiomesInSquare(int x, int y, int radius) {
-        return Collections.singleton(biome);
-    }
-
-    @Nullable
-    @Override
-    public BlockPos findBiomePosition(int x, int y, int radius, List<Biome> list, Random random) {
-        return new BlockPos(x, 65, y);  // @todo ?
     }
 
     @Override

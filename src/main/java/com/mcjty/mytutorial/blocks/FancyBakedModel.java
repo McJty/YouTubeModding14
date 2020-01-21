@@ -1,19 +1,20 @@
 package com.mcjty.mytutorial.blocks;
 
-import com.google.common.util.concurrent.FakeTimeLimiter;
+import com.google.common.collect.ImmutableList;
 import com.mcjty.mytutorial.MyTutorial;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
+import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,40 +25,43 @@ import java.util.Random;
 
 public class FancyBakedModel implements IDynamicBakedModel {
 
-    private final VertexFormat format;
-    private final ItemCameraTransforms transforms = getAllTransforms();
-
-    public FancyBakedModel(VertexFormat format) {
-        this.format = format;
-    }
-
     private TextureAtlasSprite getTexture() {
-        String name = MyTutorial.MODID + ":block/fancyblock";
-        return Minecraft.getInstance().getTextureMap().getAtlasSprite(name);
+        return Minecraft.getInstance().func_228015_a_(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(new ResourceLocation(MyTutorial.MODID, "block/fancyblock"));
     }
 
-    private void putVertex(UnpackedBakedQuad.Builder builder, Vec3d normal,
+    private void putVertex(BakedQuadBuilder builder, Vec3d normal,
                            double x, double y, double z, float u, float v, TextureAtlasSprite sprite, float r, float g, float b) {
-        for (int e = 0; e < format.getElementCount(); e++) {
-            switch (format.getElement(e).getUsage()) {
+
+        ImmutableList<VertexFormatElement> elements = builder.getVertexFormat().func_227894_c_().asList();
+        for (int j = 0 ; j < elements.size() ; j++) {
+            VertexFormatElement e = elements.get(j);
+            switch (e.getUsage()) {
                 case POSITION:
-                    builder.put(e, (float) x, (float) y, (float) z, 1.0f);
+                    builder.put(j, (float) x, (float) y, (float) z, 1.0f);
                     break;
                 case COLOR:
-                    builder.put(e, r, g, b, 1.0f);
+                    builder.put(j, r, g, b, 1.0f);
                     break;
                 case UV:
-                    if (format.getElement(e).getIndex() == 0) {
-                        u = sprite.getInterpolatedU(u);
-                        v = sprite.getInterpolatedV(v);
-                        builder.put(e, u, v, 0f, 1f);
-                        break;
+                    switch (e.getIndex()) {
+                        case 0:
+                            float iu = sprite.getInterpolatedU(u);
+                            float iv = sprite.getInterpolatedV(v);
+                            builder.put(j, iu, iv);
+                            break;
+                        case 2:
+                            builder.put(j, 0f, 1f);
+                            break;
+                        default:
+                            builder.put(j);
+                            break;
                     }
+                    break;
                 case NORMAL:
-                    builder.put(e, (float) normal.x, (float) normal.y, (float) normal.z, 0f);
+                    builder.put(j, (float) normal.x, (float) normal.y, (float) normal.z);
                     break;
                 default:
-                    builder.put(e);
+                    builder.put(j);
                     break;
             }
         }
@@ -66,8 +70,8 @@ public class FancyBakedModel implements IDynamicBakedModel {
     private BakedQuad createQuad(Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite sprite) {
         Vec3d normal = v3.subtract(v2).crossProduct(v1.subtract(v2)).normalize();
 
-        UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
-        builder.setTexture(sprite);
+        BakedQuadBuilder builder = new BakedQuadBuilder(sprite);
+        builder.setQuadOrientation(Direction.getFacingFromVector(normal.x, normal.y, normal.z));
         putVertex(builder, normal, v1.x, v1.y, v1.z, 0, 0, sprite, 1.0f, 1.0f, 1.0f);
         putVertex(builder, normal, v2.x, v2.y, v2.z, 0, 16, sprite, 1.0f, 1.0f, 1.0f);
         putVertex(builder, normal, v3.x, v3.y, v3.z, 16, 16, sprite, 1.0f, 1.0f, 1.0f);
@@ -85,7 +89,7 @@ public class FancyBakedModel implements IDynamicBakedModel {
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
 
         BlockState mimic = extraData.getData(FancyBlockTile.MIMIC);
-        if (mimic != null) {
+        if (mimic != null && !(mimic.getBlock() instanceof FancyBlock)) {
             ModelResourceLocation location = BlockModelShapes.getModelLocation(mimic);
             if (location != null) {
                 IBakedModel model = Minecraft.getInstance().getModelManager().getModel(location);
@@ -140,26 +144,6 @@ public class FancyBakedModel implements IDynamicBakedModel {
 
     @Override
     public ItemCameraTransforms getItemCameraTransforms() {
-        return transforms;
+        return ItemCameraTransforms.DEFAULT;
     }
-
-    public ItemCameraTransforms getAllTransforms() {
-        ItemTransformVec3f tpLeft = this.getTransform(ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND);
-        ItemTransformVec3f tpRight = this.getTransform(ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND);
-        ItemTransformVec3f fpLeft = this.getTransform(ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND);
-        ItemTransformVec3f fpRight = this.getTransform(ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND);
-        ItemTransformVec3f head = this.getTransform(ItemCameraTransforms.TransformType.HEAD);
-        ItemTransformVec3f gui = this.getTransform(ItemCameraTransforms.TransformType.GUI);
-        ItemTransformVec3f ground = this.getTransform(ItemCameraTransforms.TransformType.GROUND);
-        ItemTransformVec3f fixed = this.getTransform(ItemCameraTransforms.TransformType.FIXED);
-        return new ItemCameraTransforms(tpLeft, tpRight, fpLeft, fpRight, head, gui, ground, fixed);
-    }
-
-    private ItemTransformVec3f getTransform(ItemCameraTransforms.TransformType type) {
-        if (type.equals(ItemCameraTransforms.TransformType.GUI)) {
-            return new ItemTransformVec3f(new Vector3f(200, 50, 100), new Vector3f(), new Vector3f(1.0F, 1.0F, 1.0F));
-        }
-        return ItemTransformVec3f.DEFAULT;
-    }
-
 }

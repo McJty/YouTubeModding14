@@ -22,7 +22,7 @@ public class TutorialBiomeProvider extends BiomeProvider {
     }
 
     @Override
-    public Biome func_225526_b_(int x, int y, int z) {
+    public Biome getNoiseBiome(int x, int y, int z) {
         return biome;
     }
 

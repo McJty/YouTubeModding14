@@ -24,12 +24,12 @@ public class TeleportationTools {
             return null;
         }
         DimensionType source = entity.dimension;
-        ServerWorld originalWorld = entity.server.func_71218_a(source);
+        ServerWorld originalWorld = entity.server.getWorld(source);
         entity.dimension = destination;
-        ServerWorld destinationWorld = entity.server.func_71218_a(destination);
+        ServerWorld destinationWorld = entity.server.getWorld(destination);
         WorldInfo worldinfo = entity.world.getWorldInfo();
         net.minecraftforge.fml.network.NetworkHooks.sendDimensionDataPacket(entity.connection.netManager, entity);
-        entity.connection.sendPacket(new SRespawnPacket(destination, WorldInfo.func_227498_c_(worldinfo.getSeed()), worldinfo.getGenerator(), entity.interactionManager.getGameType()));
+        entity.connection.sendPacket(new SRespawnPacket(destination, WorldInfo.byHashing(worldinfo.getSeed()), worldinfo.getGenerator(), entity.interactionManager.getGameType()));
         entity.connection.sendPacket(new SServerDifficultyPacket(worldinfo.getDifficulty(), worldinfo.isDifficultyLocked()));
         PlayerList playerlist = entity.server.getPlayerList();
         playerlist.updatePermissionLevel(entity);
@@ -69,7 +69,7 @@ public class TeleportationTools {
         entity.connection.setPlayerLocation(vec.x, vec.y, vec.z, f1, f);
         entity.interactionManager.world = destinationWorld;
         entity.connection.sendPacket(new SPlayerAbilitiesPacket(entity.abilities));
-        playerlist.func_72354_b(entity, destinationWorld);
+        playerlist.sendWorldInfo(entity, destinationWorld);
         playerlist.sendInventory(entity);
 
         for (EffectInstance effectinstance : entity.getActivePotionEffects()) {

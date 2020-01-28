@@ -31,7 +31,7 @@ public class TutorialChunkGenerator extends ChunkGenerator<TutorialChunkGenerato
 
         for (x = 0; x < 16; x++) {
             for (z = 0; z < 16; z++) {
-                chunk.setBlockState(pos.func_181079_c(x, 0, z), bedrock, false);
+                chunk.setBlockState(pos.setPos(x, 0, z), bedrock, false);
             }
         }
 
@@ -41,7 +41,7 @@ public class TutorialChunkGenerator extends ChunkGenerator<TutorialChunkGenerato
                 int realz = chunkpos.z * 16 + z;
                 int height = (int) (65 + Math.sin(realx / 20.0f)*10 + Math.cos(realz / 20.0f)*10);
                 for (int y = 1 ; y < height ; y++) {
-                    chunk.setBlockState(pos.func_181079_c(x, y, z), stone, false);
+                    chunk.setBlockState(pos.setPos(x, y, z), stone, false);
                 }
             }
         }

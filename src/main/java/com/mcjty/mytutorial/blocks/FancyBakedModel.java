@@ -28,13 +28,18 @@ public class FancyBakedModel implements IDynamicBakedModel {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MyTutorial.MODID, "block/fancyblock");
 
     private TextureAtlasSprite getTexture() {
-        return Minecraft.getInstance().func_228015_a_(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(TEXTURE);
+        return Minecraft.getInstance().getTextureGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(TEXTURE);
+    }
+
+    @Override
+    public boolean func_230044_c_() {
+        return false;
     }
 
     private void putVertex(BakedQuadBuilder builder, Vec3d normal,
                            double x, double y, double z, float u, float v, TextureAtlasSprite sprite, float r, float g, float b) {
 
-        ImmutableList<VertexFormatElement> elements = builder.getVertexFormat().func_227894_c_().asList();
+        ImmutableList<VertexFormatElement> elements = builder.getVertexFormat().getElements().asList();
         for (int j = 0 ; j < elements.size() ; j++) {
             VertexFormatElement e = elements.get(j);
             switch (e.getUsage()) {

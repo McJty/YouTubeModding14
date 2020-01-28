@@ -11,17 +11,17 @@ public class WeirdMobModel extends EntityModel<WeirdMobEntity> {
 
     public WeirdMobModel() {
         body = new ModelRenderer(this, 0, 0);
-        body.func_228300_a_(-3, -3, -3, 6, 6, 6);
+        body.addBox(-3, -3, -3, 6, 6, 6);
     }
 
     @Override
-    public void func_225597_a_(WeirdMobEntity weirdMobEntity, float v, float v1, float v2, float v3, float v4) {
+    public void render(WeirdMobEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
     }
 
     @Override
-    public void func_225598_a_(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {
-        body.func_228309_a_(matrixStack, iVertexBuilder, i, i1, v, v1, v2, v3);
+    public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        body.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
 //    @Override

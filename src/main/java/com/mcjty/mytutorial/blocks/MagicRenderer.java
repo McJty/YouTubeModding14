@@ -16,6 +16,8 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
+import java.util.Random;
+
 public class MagicRenderer extends TileEntityRenderer<MagicTile> {
 
     public static final ResourceLocation MAGICBLOCK_TEXTURE = new ResourceLocation(MyTutorial.MODID, "block/magicblock");
@@ -47,19 +49,21 @@ public class MagicRenderer extends TileEntityRenderer<MagicTile> {
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(MAGICBLOCK_TEXTURE);
         IVertexBuilder builder = buffer.getBuffer(RenderType.translucent());
 
+        Random rnd = new Random(tileEntity.getPos().getX() * 337L + tileEntity.getPos().getY() * 37L + tileEntity.getPos().getZ() * 13L);
+
         long time = System.currentTimeMillis();
-        float dx1 = diffFunction(time, 1000, 0.0001f);
-        float dx2 = diffFunction(time, 1500, 0.00005f);
-        float dx3 = diffFunction(time, 1200, 0.00011f);
-        float dx4 = diffFunction(time, 1300, 0.00006f);
-        float dy1 = diffFunction(time, 1400, 0.00009f);
-        float dy2 = diffFunction(time, 1600, 0.00007f);
-        float dy3 = diffFunction(time, 1000, 0.00015f);
-        float dy4 = diffFunction(time, 1200, 0.00003f);
+        float dx1 = diffFunction(time, 900 + rnd.nextInt(800), 0.00001f + rnd.nextFloat() * 0.0001f);
+        float dx2 = diffFunction(time, 900 + rnd.nextInt(800), 0.00001f + rnd.nextFloat() * 0.0001f);
+        float dx3 = diffFunction(time, 900 + rnd.nextInt(800), 0.00001f + rnd.nextFloat() * 0.0001f);
+        float dx4 = diffFunction(time, 900 + rnd.nextInt(800), 0.00001f + rnd.nextFloat() * 0.0001f);
+        float dy1 = diffFunction(time, 900 + rnd.nextInt(800), 0.00001f + rnd.nextFloat() * 0.0001f);
+        float dy2 = diffFunction(time, 900 + rnd.nextInt(800), 0.00001f + rnd.nextFloat() * 0.0001f);
+        float dy3 = diffFunction(time, 900 + rnd.nextInt(800), 0.00001f + rnd.nextFloat() * 0.0001f);
+        float dy4 = diffFunction(time, 900 + rnd.nextInt(800), 0.00001f + rnd.nextFloat() * 0.0001f);
 
         float angle = (time / 100) % 360;
         Quaternion rotation = Vector3f.YP.rotationDegrees(angle);
-        float scale = 1.0f + diffFunction(time,1000, 0.001f);
+        float scale = 1.0f + diffFunction(time,900 + rnd.nextInt(800), 0.0001f + rnd.nextFloat() * 0.001f);
 
         matrixStack.push();
         matrixStack.translate(.5, .5, .5);

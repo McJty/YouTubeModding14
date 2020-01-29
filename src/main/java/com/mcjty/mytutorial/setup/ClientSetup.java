@@ -8,6 +8,8 @@ import com.mcjty.mytutorial.client.AfterLivingRenderer;
 import com.mcjty.mytutorial.client.InWorldRenderer;
 import com.mcjty.mytutorial.entities.WeirdMobRenderer;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,7 +34,7 @@ public class ClientSetup {
         MagicRenderer.register();
         MinecraftForge.EVENT_BUS.addListener(InWorldRenderer::render);
         MinecraftForge.EVENT_BUS.addListener(AfterLivingRenderer::render);
-
+        RenderTypeLookup.setRenderLayer(Registration.COMPLEX_MULTIPART.get(), RenderType.translucent());
 
     }
 

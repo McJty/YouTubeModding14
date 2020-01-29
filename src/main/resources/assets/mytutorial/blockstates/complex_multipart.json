@@ -1,0 +1,174 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "mytutorial:block/complex/main"
+      }
+    },
+    {
+      "when": {
+        "down": "none"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlenone"
+      }
+    },
+    {
+      "when": {
+        "up": "none"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlenone",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "south": "none"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlenone",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "none"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlenone",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "west": "none"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlenone",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "none"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlenone",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "down": "input"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlein"
+      }
+    },
+    {
+      "when": {
+        "up": "input"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlein",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "south": "input"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlein",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "input"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlein",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "west": "input"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlein",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "input"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singlein",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "down": "output"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singleout"
+      }
+    },
+    {
+      "when": {
+        "up": "output"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singleout",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "south": "output"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singleout",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "output"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singleout",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "west": "output"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singleout",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "output"
+      },
+      "apply": {
+        "model": "mytutorial:block/complex/singleout",
+        "x": 90,
+        "y": 270
+      }
+    }
+  ]
+}

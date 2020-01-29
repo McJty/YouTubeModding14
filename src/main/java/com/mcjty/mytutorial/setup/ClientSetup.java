@@ -4,6 +4,8 @@ import com.mcjty.mytutorial.MyTutorial;
 import com.mcjty.mytutorial.blocks.FancyModelLoader;
 import com.mcjty.mytutorial.blocks.FirstBlockScreen;
 import com.mcjty.mytutorial.blocks.MagicRenderer;
+import com.mcjty.mytutorial.client.AfterLivingRenderer;
+import com.mcjty.mytutorial.client.InWorldRenderer;
 import com.mcjty.mytutorial.entities.WeirdMobRenderer;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.texture.AtlasTexture;
@@ -12,6 +14,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +30,10 @@ public class ClientSetup {
         RenderingRegistry.registerEntityRenderingHandler(Registration.WEIRDMOB.get(), WeirdMobRenderer::new);
         ModelLoaderRegistry.registerLoader(new ResourceLocation(MyTutorial.MODID, "fancyloader"), new FancyModelLoader());
         MagicRenderer.register();
+        MinecraftForge.EVENT_BUS.addListener(InWorldRenderer::render);
+        MinecraftForge.EVENT_BUS.addListener(AfterLivingRenderer::render);
+
+
     }
 
     @SubscribeEvent

@@ -1,5 +1,7 @@
 {
   "variants": {
-    "" : { "model":  "mytutorial:block/magicblock" }
+    "": {
+      "model": "mytutorial:block/magicblock"
+    }
   }
 }

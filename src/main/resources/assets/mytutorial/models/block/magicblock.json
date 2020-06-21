@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "mytutorial:block/magicblock_item"
+    "all": "mytutorial:block/magicblock"
   }
 }

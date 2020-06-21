@@ -20,6 +20,12 @@ public class BlockStates extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
+        registerComplexMultipart();
+
+        simpleBlock(Registration.MAGICBLOCK.get());
+    }
+
+    private void registerComplexMultipart() {
         BlockModelBuilder dimCellFrame = models().getBuilder("block/complex/main");
 
         floatingCube(dimCellFrame, 0f, 0f, 0f, 1f, 16f, 1f);

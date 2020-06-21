@@ -28,7 +28,7 @@ public class FancyBakedModel implements IDynamicBakedModel {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MyTutorial.MODID, "block/fancyblock");
 
     private TextureAtlasSprite getTexture() {
-        return Minecraft.getInstance().getTextureGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(TEXTURE);
+        return Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(TEXTURE);
     }
 
     @Override

@@ -47,7 +47,7 @@ public class InWorldRenderer {
         Vec3d projectedView = Minecraft.getInstance().gameRenderer.getActiveRenderInfo().getProjectedView();
         matrixStack.translate(-projectedView.x, -projectedView.y, -projectedView.z);
 
-        Matrix4f positionMatrix = matrixStack.getLast().getPositionMatrix();
+        Matrix4f positionMatrix = matrixStack.getLast().getMatrix();
 
         BlockPos.Mutable pos = new BlockPos.Mutable();
         for (int dx = -10; dx <= 10; dx++) {

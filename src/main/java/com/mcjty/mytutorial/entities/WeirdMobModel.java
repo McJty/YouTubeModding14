@@ -15,7 +15,7 @@ public class WeirdMobModel extends EntityModel<WeirdMobEntity> {
     }
 
     @Override
-    public void render(WeirdMobEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(WeirdMobEntity weirdMobEntity, float v, float v1, float v2, float v3, float v4) {
 
     }
 

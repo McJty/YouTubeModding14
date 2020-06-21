@@ -34,7 +34,7 @@ public class ClientSetup {
         MagicRenderer.register();
         MinecraftForge.EVENT_BUS.addListener(InWorldRenderer::render);
         MinecraftForge.EVENT_BUS.addListener(AfterLivingRenderer::render);
-        RenderTypeLookup.setRenderLayer(Registration.COMPLEX_MULTIPART.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(Registration.COMPLEX_MULTIPART.get(), RenderType.getTranslucent());
 
     }
 
@@ -45,7 +45,7 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().getBasePath().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
+        if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
             return;
         }
 

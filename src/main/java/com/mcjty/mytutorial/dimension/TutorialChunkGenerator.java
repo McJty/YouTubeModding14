@@ -19,7 +19,7 @@ public class TutorialChunkGenerator extends ChunkGenerator<TutorialChunkGenerato
     }
 
     @Override
-    public void func_225551_a_(WorldGenRegion region, IChunk chunk) {
+    public void generateSurface(WorldGenRegion region, IChunk chunk) {
         BlockState bedrock = Blocks.BEDROCK.getDefaultState();
         BlockState stone = Blocks.STONE.getDefaultState();
         ChunkPos chunkpos = chunk.getPos();

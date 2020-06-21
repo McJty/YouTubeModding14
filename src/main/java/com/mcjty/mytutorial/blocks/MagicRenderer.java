@@ -33,7 +33,7 @@ public class MagicRenderer extends TileEntityRenderer<MagicTile> {
     }
 
     private void add(IVertexBuilder renderer, MatrixStack stack, float x, float y, float z, float u, float v) {
-        renderer.pos(stack.getLast().getPositionMatrix(), x, y, z)
+        renderer.pos(stack.getLast().getMatrix(), x, y, z)
                 .color(1.0f, 1.0f, 1.0f, 1.0f)
                 .tex(u, v)
                 .lightmap(0, 240)
@@ -52,8 +52,8 @@ public class MagicRenderer extends TileEntityRenderer<MagicTile> {
     @Override
     public void render(MagicTile tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
 
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(MAGICBLOCK_TEXTURE);
-        IVertexBuilder builder = buffer.getBuffer(RenderType.translucent());
+        TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(MAGICBLOCK_TEXTURE);
+        IVertexBuilder builder = buffer.getBuffer(RenderType.getTranslucent());
 
         Random rnd = new Random(tileEntity.getPos().getX() * 337L + tileEntity.getPos().getY() * 37L + tileEntity.getPos().getZ() * 13L);
 

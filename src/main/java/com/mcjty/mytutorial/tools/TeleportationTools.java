@@ -64,7 +64,7 @@ public class TeleportationTools {
 
         originalWorld.getProfiler().endSection();
         entity.setWorld(destinationWorld);
-        destinationWorld.func_217447_b(entity);
+        destinationWorld.addDuringPortalTeleport(entity);
         vec = entity.getPositionVec();
         entity.connection.setPlayerLocation(vec.x, vec.y, vec.z, f1, f);
         entity.interactionManager.world = destinationWorld;

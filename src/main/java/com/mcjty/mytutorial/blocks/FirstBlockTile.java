@@ -1,6 +1,6 @@
 package com.mcjty.mytutorial.blocks;
 
-import com.mcjty.mytutorial.Config;
+import com.mcjty.mytutorial.setup.Config;
 import com.mcjty.mytutorial.tools.CustomEnergyStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

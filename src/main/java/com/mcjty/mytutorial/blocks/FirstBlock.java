@@ -35,13 +35,13 @@ public class FirstBlock extends Block {
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
+    public int getLightValue(BlockState state) {
+        return state.get(BlockStateProperties.POWERED) ? super.getLightValue(state) : 0;
     }
 
     @Override
-    public int getLightValue(BlockState state) {
-        return state.get(BlockStateProperties.POWERED) ? super.getLightValue(state) : 0;
+    public boolean hasTileEntity(BlockState state) {
+        return true;
     }
 
     @Nullable
@@ -72,7 +72,7 @@ public class FirstBlock extends Block {
         return super.onBlockActivated(state, world, pos, player, hand, trace);
     }
 
-    public static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entity) {
+    private static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entity) {
         Vec3d vec = entity.getPositionVec();
         return Direction.getFacingFromVector((float) (vec.x - clickedBlock.getX()), (float) (vec.y - clickedBlock.getY()), (float) (vec.z - clickedBlock.getZ()));
     }

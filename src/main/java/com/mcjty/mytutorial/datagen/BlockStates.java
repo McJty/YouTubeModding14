@@ -6,7 +6,9 @@ import com.mcjty.mytutorial.blocks.ComplexMultipartTile;
 import com.mcjty.mytutorial.setup.Registration;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ExistingFileHelper;
@@ -20,9 +22,22 @@ public class BlockStates extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        registerComplexMultipart();
-
         simpleBlock(Registration.MAGICBLOCK.get());
+        registerFirstBlock();
+        registerComplexMultipart();
+    }
+
+    private void registerFirstBlock() {
+        ResourceLocation txt = new ResourceLocation(MyTutorial.MODID, "block/firstblock");
+        BlockModelBuilder modelFirstblock = models().cube("firstblock", txt, txt, new ResourceLocation(MyTutorial.MODID, "block/firstblock_front"), txt, txt, txt);
+        BlockModelBuilder modelFirstblockPowered = models().cube("firstblock_powered", txt, txt, new ResourceLocation(MyTutorial.MODID, "block/firstblock_powered"), txt, txt, txt);
+        directionalBlock(Registration.FIRSTBLOCK.get(), state -> {
+            if (state.get(BlockStateProperties.POWERED)) {
+                return modelFirstblockPowered;
+            } else {
+                return modelFirstblock;
+            }
+        });
     }
 
     private void registerComplexMultipart() {

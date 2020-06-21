@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer": "mytutorial:item/magicblock_item"
+    "layer0": "mytutorial:item/magicblock_item"
   }
 }

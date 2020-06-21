@@ -16,7 +16,9 @@ public class Items extends ItemModelProvider {
     @Override
     protected void registerModels() {
         singleTexture(Registration.MAGICBLOCK_ITEM.get().getRegistryName().getPath(), new ResourceLocation("item/handheld"),
-                "layer", new ResourceLocation(MyTutorial.MODID, "item/magicblock_item"));
+                "layer0", new ResourceLocation(MyTutorial.MODID, "item/magicblock_item"));
+        singleTexture(Registration.FIRSTITEM.get().getRegistryName().getPath(), new ResourceLocation("item/handheld"),
+                "layer0", new ResourceLocation(MyTutorial.MODID, "item/firstitem"));
         withExistingParent(Registration.FIRSTBLOCK_ITEM.get().getRegistryName().getPath(), new ResourceLocation(MyTutorial.MODID, "block/firstblock"));
     }
 }

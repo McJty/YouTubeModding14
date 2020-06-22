@@ -7,7 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class CommandTest implements Command<CommandSource> {
 
@@ -21,7 +21,7 @@ public class CommandTest implements Command<CommandSource> {
 
     @Override
     public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        context.getSource().sendFeedback(new StringTextComponent("Hello world!"), false);
+        context.getSource().sendFeedback(new TranslationTextComponent("message.mytutorial.command.test"), false);
         return 0;
     }
 }

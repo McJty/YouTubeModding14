@@ -2,9 +2,7 @@ package com.mcjty.mytutorial.items;
 
 import com.mcjty.mytutorial.setup.ModSetup;
 import com.mcjty.mytutorial.setup.Registration;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,6 +14,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.spawner.AbstractSpawner;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Objects;
 
@@ -40,17 +39,14 @@ public class WeirdMobEggItem extends Item {
             BlockPos blockpos = context.getPos();
             Direction direction = context.getFace();
             BlockState blockstate = world.getBlockState(blockpos);
-            Block block = blockstate.getBlock();
-            if (block == Blocks.SPAWNER) {
-                TileEntity tileentity = world.getTileEntity(blockpos);
-                if (tileentity instanceof MobSpawnerTileEntity) {
-                    AbstractSpawner abstractspawner = ((MobSpawnerTileEntity)tileentity).getSpawnerBaseLogic();
-                    abstractspawner.setEntityType(Registration.WEIRDMOB.get());
-                    tileentity.markDirty();
-                    world.notifyBlockUpdate(blockpos, blockstate, blockstate, 3);
-                    itemstack.shrink(1);
-                    return ActionResultType.SUCCESS;
-                }
+            TileEntity tileentity = world.getTileEntity(blockpos);
+            if (tileentity instanceof MobSpawnerTileEntity) {
+                AbstractSpawner abstractspawner = ((MobSpawnerTileEntity) tileentity).getSpawnerBaseLogic();
+                abstractspawner.setEntityType(Registration.WEIRDMOB.get());
+                tileentity.markDirty();
+                world.notifyBlockUpdate(blockpos, blockstate, blockstate, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                itemstack.shrink(1);
+                return ActionResultType.SUCCESS;
             }
 
             BlockPos blockpos1;

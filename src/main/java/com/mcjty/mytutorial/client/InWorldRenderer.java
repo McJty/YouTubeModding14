@@ -47,7 +47,7 @@ public class InWorldRenderer {
         Vec3d projectedView = Minecraft.getInstance().gameRenderer.getActiveRenderInfo().getProjectedView();
         matrixStack.translate(-projectedView.x, -projectedView.y, -projectedView.z);
 
-        Matrix4f positionMatrix = matrixStack.getLast().getMatrix();
+        Matrix4f matrix = matrixStack.getLast().getMatrix();
 
         BlockPos.Mutable pos = new BlockPos.Mutable();
         for (int dx = -10; dx <= 10; dx++) {
@@ -55,20 +55,20 @@ public class InWorldRenderer {
                 for (int dz = -10; dz <= 10; dz++) {
                     pos.setPos(px + dx, py + dy, pz + dz);
                     if (world.getTileEntity(pos) != null) {
-                        blueLine(builder, positionMatrix, pos, 0, 0, 0, 1, 0, 0);
-                        blueLine(builder, positionMatrix, pos, 0, 1, 0, 1, 1, 0);
-                        blueLine(builder, positionMatrix, pos, 0, 0, 1, 1, 0, 1);
-                        blueLine(builder, positionMatrix, pos, 0, 1, 1, 1, 1, 1);
+                        blueLine(builder, matrix, pos, 0, 0, 0, 1, 0, 0);
+                        blueLine(builder, matrix, pos, 0, 1, 0, 1, 1, 0);
+                        blueLine(builder, matrix, pos, 0, 0, 1, 1, 0, 1);
+                        blueLine(builder, matrix, pos, 0, 1, 1, 1, 1, 1);
 
-                        blueLine(builder, positionMatrix, pos, 0, 0, 0, 0, 0, 1);
-                        blueLine(builder, positionMatrix, pos, 1, 0, 0, 1, 0, 1);
-                        blueLine(builder, positionMatrix, pos, 0, 1, 0, 0, 1, 1);
-                        blueLine(builder, positionMatrix, pos, 1, 1, 0, 1, 1, 1);
+                        blueLine(builder, matrix, pos, 0, 0, 0, 0, 0, 1);
+                        blueLine(builder, matrix, pos, 1, 0, 0, 1, 0, 1);
+                        blueLine(builder, matrix, pos, 0, 1, 0, 0, 1, 1);
+                        blueLine(builder, matrix, pos, 1, 1, 0, 1, 1, 1);
 
-                        blueLine(builder, positionMatrix, pos, 0, 0, 0, 0, 1, 0);
-                        blueLine(builder, positionMatrix, pos, 1, 0, 0, 1, 1, 0);
-                        blueLine(builder, positionMatrix, pos, 0, 0, 1, 0, 1, 1);
-                        blueLine(builder, positionMatrix, pos, 1, 0, 1, 1, 1, 1);
+                        blueLine(builder, matrix, pos, 0, 0, 0, 0, 1, 0);
+                        blueLine(builder, matrix, pos, 1, 0, 0, 1, 1, 0);
+                        blueLine(builder, matrix, pos, 0, 0, 1, 0, 1, 1);
+                        blueLine(builder, matrix, pos, 1, 0, 1, 1, 1, 1);
                     }
                 }
             }

@@ -3,13 +3,12 @@ package com.mcjty.mytutorial.gui;
 import com.mcjty.mytutorial.MyTutorial;
 import com.mcjty.mytutorial.network.Networking;
 import com.mcjty.mytutorial.network.PacketSpawn;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class SpawnerScreen extends Screen {
 
@@ -20,7 +19,7 @@ public class SpawnerScreen extends Screen {
 
 
     public SpawnerScreen() {
-        super(new StringTextComponent("Spawn something"));
+        super(new TranslationTextComponent("screen.mytutorial.spawn"));
     }
 
     @Override
@@ -41,7 +40,7 @@ public class SpawnerScreen extends Screen {
     }
 
     private void spawn(String id) {
-        Networking.INSTANCE.sendToServer(new PacketSpawn(id, minecraft.player.dimension, minecraft.player.getPosition()));
+        Networking.sendToServer(new PacketSpawn(id, minecraft.player.dimension, minecraft.player.getPosition()));
         minecraft.displayGuiScreen(null);
     }
 

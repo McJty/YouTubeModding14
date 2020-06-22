@@ -37,7 +37,7 @@ public class PacketSpawn {
         buf.writeBlockPos(pos);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
+    public boolean handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerWorld spawnWorld = ctx.get().getSender().world.getServer().getWorld(type);
             EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(id));
@@ -46,7 +46,7 @@ public class PacketSpawn {
             }
             entityType.spawn(spawnWorld, null, null, pos, SpawnReason.SPAWN_EGG, true, true);
         });
-        ctx.get().setPacketHandled(true);
+        return true;
     }
 
 }

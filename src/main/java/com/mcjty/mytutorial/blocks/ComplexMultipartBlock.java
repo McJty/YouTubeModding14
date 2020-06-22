@@ -28,7 +28,7 @@ public class ComplexMultipartBlock extends Block {
     public static final EnumProperty<ComplexMultipartTile.Mode> UP = EnumProperty.create("up", ComplexMultipartTile.Mode.class);
     public static final EnumProperty<ComplexMultipartTile.Mode> DOWN = EnumProperty.create("down", ComplexMultipartTile.Mode.class);
 
-    private final static VoxelShape RENDER_SHAPE = VoxelShapes.create(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
+    private static final VoxelShape RENDER_SHAPE = VoxelShapes.create(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
 
     public ComplexMultipartBlock() {
         super(Properties.create(Material.IRON)

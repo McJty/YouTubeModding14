@@ -32,11 +32,17 @@ public class FirstBlockContainer extends Container {
         this.playerEntity = player;
         this.playerInventory = new InvWrapper(playerInventory);
 
-        tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-            addSlot(new SlotItemHandler(h, 0, 64, 24));
-        });
+        if (tileEntity != null) {
+            tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+                addSlot(new SlotItemHandler(h, 0, 64, 24));
+            });
+        }
         layoutPlayerInventorySlots(10, 70);
+        trackPower();
+    }
 
+    // Setup syncing of power from server to client so that the GUI can show the amount of power in the block
+    private void trackPower() {
         // Unfortunatelly on a dedicated server ints are actually truncated to short so we need
         // to split our integer here (split our 32 bit integer into two 16 bit integers)
         trackInt(new IntReferenceHolder() {

@@ -3,5 +3,10 @@
     "block.mytutorial.firstblock": "First Block",
 
     "_comment": "Creative Tabs",
-    "itemGroup.mytutorial": "Tutorial"
+    "itemGroup.mytutorial": "Tutorial",
+
+    "message.mytutorial.command.test": "Hello world!",
+
+    "screen.mytutorial.firstblock": "FirstBlock Screen",
+    "screen.mytutorial.spawn": "Spawn something"
 }

@@ -1,6 +1,5 @@
 package com.mcjty.mytutorial.setup;
 
-import com.mcjty.mytutorial.MyTutorial;
 import com.mcjty.mytutorial.blocks.*;
 import com.mcjty.mytutorial.dimension.TutorialModDimension;
 import com.mcjty.mytutorial.entities.WeirdMobEntity;
@@ -14,6 +13,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;
@@ -47,7 +47,8 @@ public class Registration {
 
     public static final RegistryObject<ContainerType<FirstBlockContainer>> FIRSTBLOCK_CONTAINER = CONTAINERS.register("firstblock", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
-        return new FirstBlockContainer(windowId, MyTutorial.proxy.getClientWorld(), pos, inv, MyTutorial.proxy.getClientPlayer());
+        World world = inv.player.getEntityWorld();
+        return new FirstBlockContainer(windowId, world, pos, inv, inv.player);
     }));
 
     public static final RegistryObject<FancyBlock> FANCYBLOCK = BLOCKS.register("fancyblock", FancyBlock::new);

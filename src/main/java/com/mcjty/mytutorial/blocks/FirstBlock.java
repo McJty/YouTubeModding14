@@ -1,15 +1,18 @@
 package com.mcjty.mytutorial.blocks;
 
+import com.mcjty.mytutorial.setup.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
@@ -25,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class FirstBlock extends Block {
 
@@ -34,6 +38,11 @@ public class FirstBlock extends Block {
                 .hardnessAndResistance(2.0f)
                 .lightValue(14)
         );
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable IBlockReader reader, List<ITextComponent> list, ITooltipFlag flags) {
+        list.add(new TranslationTextComponent("message.firstblock", Integer.toString(Config.FIRSTBLOCK_GENERATE.get())));
     }
 
     @Override
@@ -78,9 +87,8 @@ public class FirstBlock extends Block {
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");
             }
-            return ActionResultType.SUCCESS;
         }
-        return super.onBlockActivated(state, world, pos, player, hand, trace);
+        return ActionResultType.SUCCESS;
     }
 
     @Override

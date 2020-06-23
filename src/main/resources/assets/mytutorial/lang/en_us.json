@@ -1,11 +1,20 @@
 {
+    "item.mytutorial.weirdmob_egg": "Monster egg for a weird mob",
     "item.mytutorial.firstitem": "First Item",
     "block.mytutorial.firstblock": "First Block",
+    "block.mytutorial.magicblock": "Magic Block",
+    "block.mytutorial.fancyblock": "Magic Block",
+    "block.mytutorial.complex_multipart": "Complex Multipart",
 
     "_comment": "Creative Tabs",
     "itemGroup.mytutorial": "Tutorial",
 
     "message.mytutorial.command.test": "Hello world!",
+    "message.firstblock": "This is the first block of this mod. It is directional and has an inventory. It can also generate power at about %s per tick",
+    "message.magicblock": "This magic block does some fancy rendering",
+    "message.fancyblock": "This fancy block can mimic other blocks by right clicking the other block on it",
+    "message.complex_multipart": "This is an example of a complex multipart model",
+    "message.firstitem": "A very simple item. It's very simple",
 
     "screen.mytutorial.firstblock": "FirstBlock Screen",
     "screen.mytutorial.spawn": "Spawn something"

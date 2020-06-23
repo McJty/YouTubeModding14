@@ -11,9 +11,11 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
@@ -50,5 +52,13 @@ public class ClientSetup {
         }
 
         event.addSprite(MAGICBLOCK_TEXTURE);
+    }
+
+    @SubscribeEvent
+    public void onTooltipPre(RenderTooltipEvent.Pre event) {
+        Item item = event.getStack().getItem();
+        if (item.getRegistryName().getNamespace().equals(MyTutorial.MODID)) {
+            event.setMaxWidth(200);
+        }
     }
 }

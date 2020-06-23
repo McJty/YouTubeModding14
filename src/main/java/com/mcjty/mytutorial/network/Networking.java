@@ -18,7 +18,10 @@ public class Networking {
     }
 
     public static void registerMessages() {
-        INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(MyTutorial.MODID, "mytutorial"), () -> "1.0", s -> true, s -> true);
+        INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(MyTutorial.MODID, "mytutorial"),
+                () -> "1.0",
+                s -> true,
+                s -> true);
 
         INSTANCE.messageBuilder(PacketOpenGui.class, nextID())
                 .encoder((packetOpenGui, packetBuffer) -> {})

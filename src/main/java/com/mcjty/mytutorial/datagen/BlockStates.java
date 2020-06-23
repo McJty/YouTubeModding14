@@ -5,14 +5,14 @@ import com.mcjty.mytutorial.blocks.ComplexMultipartBlock;
 import com.mcjty.mytutorial.blocks.ComplexMultipartTile;
 import com.mcjty.mytutorial.setup.Registration;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ExistingFileHelper;
-import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
+import net.minecraftforge.client.model.generators.*;
+
+import java.util.function.Function;
 
 public class BlockStates extends BlockStateProvider {
 
@@ -31,14 +31,16 @@ public class BlockStates extends BlockStateProvider {
         ResourceLocation txt = new ResourceLocation(MyTutorial.MODID, "block/firstblock");
         BlockModelBuilder modelFirstblock = models().cube("firstblock", txt, txt, new ResourceLocation(MyTutorial.MODID, "block/firstblock_front"), txt, txt, txt);
         BlockModelBuilder modelFirstblockPowered = models().cube("firstblock_powered", txt, txt, new ResourceLocation(MyTutorial.MODID, "block/firstblock_powered"), txt, txt, txt);
-        directionalBlock(Registration.FIRSTBLOCK.get(), state -> {
+        orientedBlock(Registration.FIRSTBLOCK.get(), state -> {
             if (state.get(BlockStateProperties.POWERED)) {
                 return modelFirstblockPowered;
             } else {
                 return modelFirstblock;
             }
-        }, 90);
+        });
     }
+
+
 
     private void registerComplexMultipart() {
         BlockModelBuilder dimCellFrame = models().getBuilder("block/complex/main");
@@ -94,4 +96,17 @@ public class BlockStates extends BlockStateProvider {
             bld.part().modelFile(models[mode.ordinal()]).rotationY(270).rotationX(90).addModel().condition(ComplexMultipartBlock.EAST, mode);
         }
     }
+
+    private void orientedBlock(Block block, Function<BlockState, ModelFile> modelFunc) {
+        getVariantBuilder(block)
+                .forAllStates(state -> {
+                    Direction dir = state.get(BlockStateProperties.FACING);
+                    return ConfiguredModel.builder()
+                            .modelFile(modelFunc.apply(state))
+                            .rotationX(dir.getAxis() == Direction.Axis.Y ?  dir.getAxisDirection().getOffset() * -90 : 0)
+                            .rotationY(dir.getAxis() != Direction.Axis.Y ? ((dir.getHorizontalIndex() + 2) % 4) * 90 : 0)
+                            .build();
+                });
+    }
+
 }

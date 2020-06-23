@@ -15,24 +15,24 @@ import java.util.function.Supplier;
 
 public class PacketSpawn {
 
-    private final String id;
+    private final ResourceLocation id;
     private final DimensionType type;
     private final BlockPos pos;
 
     public PacketSpawn(PacketBuffer buf) {
-        id = buf.readString();
+        id = buf.readResourceLocation();
         type = DimensionType.getById(buf.readInt());
         pos = buf.readBlockPos();
     }
 
-    public PacketSpawn(String id, DimensionType type, BlockPos pos) {
+    public PacketSpawn(ResourceLocation id, DimensionType type, BlockPos pos) {
         this.id = id;
         this.type = type;
         this.pos = pos;
     }
 
     public void toBytes(PacketBuffer buf) {
-        buf.writeString(id);
+        buf.writeResourceLocation(id);
         buf.writeInt(type.getId());
         buf.writeBlockPos(pos);
     }
@@ -40,9 +40,9 @@ public class PacketSpawn {
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerWorld spawnWorld = ctx.get().getSender().world.getServer().getWorld(type);
-            EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(id));
+            EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(id);
             if (entityType == null) {
-                throw new IllegalStateException("This cannot happen! Unknown id '" + id + "'!");
+                throw new IllegalStateException("This cannot happen! Unknown id '" + id.toString() + "'!");
             }
             entityType.spawn(spawnWorld, null, null, pos, SpawnReason.SPAWN_EGG, true, true);
         });

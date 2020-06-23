@@ -40,7 +40,7 @@ public class SpawnerScreen extends Screen {
     }
 
     private void spawn(String id) {
-        Networking.sendToServer(new PacketSpawn(id, minecraft.player.dimension, minecraft.player.getPosition()));
+        Networking.sendToServer(new PacketSpawn(new ResourceLocation(id), minecraft.player.dimension, minecraft.player.getPosition()));
         minecraft.displayGuiScreen(null);
     }
 

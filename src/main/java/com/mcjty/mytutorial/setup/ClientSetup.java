@@ -1,12 +1,14 @@
 package com.mcjty.mytutorial.setup;
 
 import com.mcjty.mytutorial.MyTutorial;
+import com.mcjty.mytutorial.blocks.FancyBlockColor;
 import com.mcjty.mytutorial.blocks.FancyModelLoader;
 import com.mcjty.mytutorial.blocks.FirstBlockScreen;
 import com.mcjty.mytutorial.blocks.MagicRenderer;
 import com.mcjty.mytutorial.client.AfterLivingRenderer;
 import com.mcjty.mytutorial.client.InWorldRenderer;
 import com.mcjty.mytutorial.entities.WeirdMobRenderer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -40,6 +42,7 @@ public class ClientSetup {
         RenderTypeLookup.setRenderLayer(Registration.COMPLEX_MULTIPART.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(Registration.FANCYBLOCK.get(), (RenderType) -> true);
 
+        Minecraft.getInstance().getBlockColors().register(new FancyBlockColor(), Registration.FANCYBLOCK.get());
     }
 
     @SubscribeEvent

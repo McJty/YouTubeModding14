@@ -34,6 +34,10 @@ public class FancyBlockTile extends TileEntity {
         world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 
+    public BlockState getMimic() {
+        return mimic;
+    }
+
     // The getUpdateTag()/handleUpdateTag() pair is called whenever the client receives a new chunk
     // it hasn't seen before. i.e. the chunk is loaded
 

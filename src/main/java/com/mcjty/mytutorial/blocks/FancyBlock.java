@@ -42,6 +42,13 @@ public class FancyBlock extends Block {
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+        TileEntity te = reader.getTileEntity(pos);
+        if (te instanceof FancyBlockTile) {
+            BlockState mimic = ((FancyBlockTile) te).getMimic();
+            if (mimic != null) {
+                return mimic.getShape(reader, pos, context);
+            }
+        }
         return SHAPE;
     }
 

@@ -40,6 +40,19 @@ public class FancyBlock extends Block {
         list.add(new TranslationTextComponent("message.fancyblock"));
     }
 
+
+    @Override
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof FancyBlockTile) {
+            BlockState mimic = ((FancyBlockTile) te).getMimic();
+            if (mimic != null) {
+                return mimic.getLightValue(world, pos);
+            }
+        }
+        return super.getLightValue(state, world, pos);
+    }
+
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
         TileEntity te = reader.getTileEntity(pos);

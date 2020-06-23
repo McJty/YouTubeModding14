@@ -37,7 +37,7 @@ public class BlockStates extends BlockStateProvider {
             } else {
                 return modelFirstblock;
             }
-        });
+        }, 90);
     }
 
     private void registerComplexMultipart() {

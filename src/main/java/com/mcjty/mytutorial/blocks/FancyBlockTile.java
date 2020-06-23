@@ -34,15 +34,27 @@ public class FancyBlockTile extends TileEntity {
         world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 
+    // The getUpdateTag()/handleUpdateTag() pair is called whenever the client receives a new chunk
+    // it hasn't seen before. i.e. the chunk is loaded
 
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT tag = super.getUpdateTag();
-        if (mimic != null) {
-            tag.put("mimic", NBTUtil.writeBlockState(mimic));
-        }
+        writeMimic(tag);
         return tag;
     }
+
+    @Override
+    public void handleUpdateTag(CompoundNBT tag) {
+        // This is actually the default but placed here so you
+        // know this is the place to potentially have a lighter read() that only
+        // considers things needed client-side
+        read(tag);
+    }
+
+    // The getUpdatePacket()/onDataPacket() pair is used when a block update happens on the client
+    // (a blockstate change or an explicit notificiation of a block update from the server). It's
+    // easiest to implement them based on getUpdateTag()/handleUpdateTag()
 
     @Nullable
     @Override
@@ -54,12 +66,10 @@ public class FancyBlockTile extends TileEntity {
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         BlockState oldMimic = mimic;
         CompoundNBT tag = pkt.getNbtCompound();
-        if (tag.contains("mimic")) {
-            mimic = NBTUtil.readBlockState(tag.getCompound("mimic"));
-            if (!Objects.equals(oldMimic, mimic)) {
-                ModelDataManager.requestModelDataRefresh(this);
-                world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
-            }
+        handleUpdateTag(tag);
+        if (!Objects.equals(oldMimic, mimic)) {
+            ModelDataManager.requestModelDataRefresh(this);
+            world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
         }
     }
 
@@ -74,6 +84,10 @@ public class FancyBlockTile extends TileEntity {
     @Override
     public void read(CompoundNBT tag) {
         super.read(tag);
+        readMimic(tag);
+    }
+
+    private void readMimic(CompoundNBT tag) {
         if (tag.contains("mimic")) {
             mimic = NBTUtil.readBlockState(tag.getCompound("mimic"));
         }
@@ -81,9 +95,13 @@ public class FancyBlockTile extends TileEntity {
 
     @Override
     public CompoundNBT write(CompoundNBT tag) {
+        writeMimic(tag);
+        return super.write(tag);
+    }
+
+    private void writeMimic(CompoundNBT tag) {
         if (mimic != null) {
             tag.put("mimic", NBTUtil.writeBlockState(mimic));
         }
-        return super.write(tag);
     }
 }

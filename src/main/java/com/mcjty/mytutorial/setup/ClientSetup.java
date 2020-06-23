@@ -36,7 +36,9 @@ public class ClientSetup {
         MagicRenderer.register();
         MinecraftForge.EVENT_BUS.addListener(InWorldRenderer::render);
         MinecraftForge.EVENT_BUS.addListener(AfterLivingRenderer::render);
+
         RenderTypeLookup.setRenderLayer(Registration.COMPLEX_MULTIPART.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(Registration.FANCYBLOCK.get(), (RenderType) -> true);
 
     }
 

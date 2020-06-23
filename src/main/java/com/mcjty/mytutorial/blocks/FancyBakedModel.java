@@ -4,24 +4,27 @@ import com.google.common.collect.ImmutableList;
 import com.mcjty.mytutorial.MyTutorial;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockModelShapes;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class FancyBakedModel implements IDynamicBakedModel {
 
@@ -95,18 +98,18 @@ public class FancyBakedModel implements IDynamicBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
 
+        RenderType layer = MinecraftForgeClient.getRenderLayer();
+
         BlockState mimic = extraData.getData(FancyBlockTile.MIMIC);
         if (mimic != null && !(mimic.getBlock() instanceof FancyBlock)) {
-            ModelResourceLocation location = BlockModelShapes.getModelLocation(mimic);
-            if (location != null) {
-                IBakedModel model = Minecraft.getInstance().getModelManager().getModel(location);
-                if (model != null) {
-                    return model.getQuads(mimic, side, rand, extraData);
-                }
+            if (layer == null || RenderTypeLookup.canRenderInLayer(mimic, layer)) {
+                IBakedModel model = Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelShapes().getModel(mimic);
+                return model.getQuads(mimic, side, rand, EmptyModelData.INSTANCE);
             }
+            return Collections.emptyList();
         }
 
-        if (side != null) {
+        if (side != null || (layer != null && !layer.equals(RenderType.getSolid()))) {
             return Collections.emptyList();
         }
 

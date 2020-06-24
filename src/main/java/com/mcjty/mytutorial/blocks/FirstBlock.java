@@ -55,6 +55,7 @@ public class FirstBlock extends Block {
         return true;
     }
 
+
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
@@ -67,6 +68,7 @@ public class FirstBlock extends Block {
         return getDefaultState().with(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
         if (!world.isRemote) {

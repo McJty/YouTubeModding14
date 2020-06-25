@@ -23,7 +23,7 @@ public class Recipes extends RecipeProvider {
                 .patternLine("xxx")
                 .patternLine("x#x")
                 .patternLine("xxx")
-                .key('x', Blocks.COBBLESTONE)
+                .key('x', Tags.Items.COBBLESTONE)
                 .key('#', Tags.Items.DYES_RED)
                 .setGroup("mytutorial")
                 .addCriterion("cobblestone", InventoryChangeTrigger.Instance.forItems(Blocks.COBBLESTONE))

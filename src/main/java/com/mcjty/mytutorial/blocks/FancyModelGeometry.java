@@ -1,6 +1,5 @@
 package com.mcjty.mytutorial.blocks;
 
-import com.mcjty.mytutorial.MyTutorial;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.AtlasTexture;

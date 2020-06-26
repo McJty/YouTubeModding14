@@ -79,13 +79,15 @@ public class FancyBakedModel implements IDynamicBakedModel {
 
     private BakedQuad createQuad(Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite sprite) {
         Vec3d normal = v3.subtract(v2).crossProduct(v1.subtract(v2)).normalize();
+        int tw = sprite.getWidth();
+        int th = sprite.getHeight();
 
         BakedQuadBuilder builder = new BakedQuadBuilder(sprite);
         builder.setQuadOrientation(Direction.getFacingFromVector(normal.x, normal.y, normal.z));
         putVertex(builder, normal, v1.x, v1.y, v1.z, 0, 0, sprite, 1.0f, 1.0f, 1.0f);
-        putVertex(builder, normal, v2.x, v2.y, v2.z, 0, 16, sprite, 1.0f, 1.0f, 1.0f);
-        putVertex(builder, normal, v3.x, v3.y, v3.z, 16, 16, sprite, 1.0f, 1.0f, 1.0f);
-        putVertex(builder, normal, v4.x, v4.y, v4.z, 16, 0, sprite, 1.0f, 1.0f, 1.0f);
+        putVertex(builder, normal, v2.x, v2.y, v2.z, 0, th, sprite, 1.0f, 1.0f, 1.0f);
+        putVertex(builder, normal, v3.x, v3.y, v3.z, tw, th, sprite, 1.0f, 1.0f, 1.0f);
+        putVertex(builder, normal, v4.x, v4.y, v4.z, tw, 0, sprite, 1.0f, 1.0f, 1.0f);
         return builder.build();
     }
 
@@ -104,7 +106,11 @@ public class FancyBakedModel implements IDynamicBakedModel {
         if (mimic != null && !(mimic.getBlock() instanceof FancyBlock)) {
             if (layer == null || RenderTypeLookup.canRenderInLayer(mimic, layer)) {
                 IBakedModel model = Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelShapes().getModel(mimic);
-                return model.getQuads(mimic, side, rand, EmptyModelData.INSTANCE);
+                try {
+                    return model.getQuads(mimic, side, rand, EmptyModelData.INSTANCE);
+                } catch (Exception e) {
+                    return Collections.emptyList();
+                }
             }
             return Collections.emptyList();
         }

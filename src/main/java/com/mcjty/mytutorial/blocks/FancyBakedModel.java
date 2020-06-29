@@ -60,7 +60,7 @@ public class FancyBakedModel implements IDynamicBakedModel {
                             builder.put(j, iu, iv);
                             break;
                         case 2:
-                            builder.put(j, 0f, 1f);
+                            builder.put(j, (short) 0, (short) 0);
                             break;
                         default:
                             builder.put(j);

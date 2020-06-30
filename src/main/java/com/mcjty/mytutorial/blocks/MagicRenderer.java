@@ -1,6 +1,7 @@
 package com.mcjty.mytutorial.blocks;
 
 import com.mcjty.mytutorial.MyTutorial;
+import com.mcjty.mytutorial.setup.Config;
 import com.mcjty.mytutorial.setup.Registration;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -23,6 +24,7 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class MagicRenderer extends TileEntityRenderer<MagicTile> {
 
@@ -67,7 +69,8 @@ public class MagicRenderer extends TileEntityRenderer<MagicTile> {
         float dy3 = diffFunction(time, 900 + rnd.nextInt(800), 0.00001f + rnd.nextFloat() * 0.0001f);
         float dy4 = diffFunction(time, 900 + rnd.nextInt(800), 0.00001f + rnd.nextFloat() * 0.0001f);
 
-        float angle = (time / 100) % 360;
+        double speed = Config.ROTATION_SPEED.get();
+        float angle = (time / (int)speed) % 360;
         Quaternion rotation = Vector3f.YP.rotationDegrees(angle);
         float scale = 1.0f + diffFunction(time,900 + rnd.nextInt(800), 0.0001f + rnd.nextFloat() * 0.001f);
 

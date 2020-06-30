@@ -20,14 +20,17 @@ public class Config {
     public static ForgeConfigSpec.IntValue FIRSTBLOCK_SEND;
     public static ForgeConfigSpec.IntValue FIRSTBLOCK_TICKS;
 
+    public static ForgeConfigSpec.DoubleValue ROTATION_SPEED;
+
 
     static {
 
         ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
         ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 
-        SERVER_BUILDER.comment("General settings").push(CATEGORY_GENERAL);
-        SERVER_BUILDER.pop();
+        CLIENT_BUILDER.comment("General settings").push(CATEGORY_GENERAL);
+        ROTATION_SPEED = CLIENT_BUILDER.comment("Rotation speed of the magic block").defineInRange("rotationSpeed", 100.0, 0.0, 1000000.0);
+        CLIENT_BUILDER.pop();
 
         SERVER_BUILDER.comment("Power settings").push(CATEGORY_POWER);
 

@@ -13,7 +13,7 @@ public class Networking {
     private static SimpleChannel INSTANCE;
     private static int ID = 0;
 
-    public static int nextID() {
+    private static int nextID() {
         return ID++;
     }
 

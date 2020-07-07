@@ -11,7 +11,7 @@ public class WeirdMobModel extends EntityModel<WeirdMobEntity> {
 
     public WeirdMobModel() {
         body = new ModelRenderer(this, 0, 0);
-        body.addBox(-3, -3, -3, 6, 6, 6);
+        body.addBox(-3, 14, -3, 6, 6, 6);
     }
 
     @Override

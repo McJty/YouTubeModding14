@@ -17,7 +17,7 @@ public class AfterLivingRenderer {
         ClientPlayerEntity player = Minecraft.getInstance().player;
 
         if (player.getHeldItemMainhand().getItem() == Items.GHAST_TEAR) {
-            showMobs(event.getMatrixStack(), event.getEntity());
+            showMobs(event.getMatrixStack(), event.getBuffers(), event.getEntity());
         }
     }
 
@@ -40,8 +40,7 @@ public class AfterLivingRenderer {
     }
 
 
-    private static void showMobs(MatrixStack matrixStack, LivingEntity entity) {
-        IRenderTypeBuffer.Impl buffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+    private static void showMobs(MatrixStack matrixStack, IRenderTypeBuffer buffer, LivingEntity entity) {
         IVertexBuilder builder = buffer.getBuffer(MyRenderType.OVERLAY_LINES);
 
         Matrix4f positionMatrix = matrixStack.getLast().getMatrix();

@@ -9,30 +9,34 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class EntityHealthProvider implements ICapabilitySerializable<CompoundNBT> {
+public class EntityChargeProvider implements ICapabilitySerializable<CompoundNBT> {
 
-    private final DefaultEntityHealth defaultHealth = new DefaultEntityHealth();
-    private final LazyOptional<IEntityHealth> health = LazyOptional.of(() -> defaultHealth);
+    private final DefaultEntityCharge charge = new DefaultEntityCharge();
+    private final LazyOptional<IEntityCharge> chargeOptional = LazyOptional.of(() -> charge);
+
+    public void invalidate() {
+        chargeOptional.invalidate();
+    }
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        return health.cast();
+        return chargeOptional.cast();
     }
 
     @Override
     public CompoundNBT serializeNBT() {
-        if (CapabilityEntityHealth.ENTITY_HEALTH_CAPABILITY == null) {
+        if (CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY == null) {
             return new CompoundNBT();
         } else {
-            return (CompoundNBT) CapabilityEntityHealth.ENTITY_HEALTH_CAPABILITY.writeNBT(defaultHealth, null);
+            return (CompoundNBT) CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY.writeNBT(charge, null);
         }
     }
 
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
-        if (CapabilityEntityHealth.ENTITY_HEALTH_CAPABILITY != null) {
-            CapabilityEntityHealth.ENTITY_HEALTH_CAPABILITY.readNBT(defaultHealth, null, nbt);
+        if (CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY != null) {
+            CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY.readNBT(charge, null, nbt);
         }
     }
 }

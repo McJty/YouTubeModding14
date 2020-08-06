@@ -15,7 +15,7 @@
     "message.fancyblock": "This fancy block can mimic other blocks by right clicking the other block on it",
     "message.complex_multipart": "This is an example of a complex multipart model",
     "message.firstitem": "A very simple item. It's very simple",
-    "message.increase_health": "Mob health has been increased to %s",
+    "message.increase_charge": "Mob has been charged to %s",
 
     "screen.mytutorial.firstblock": "FirstBlock Screen",
     "screen.mytutorial.spawn": "Spawn something"

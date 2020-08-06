@@ -24,14 +24,14 @@ public class CapabilityEntityCharge {
         @Override
         public INBT writeNBT(Capability<IEntityCharge> capability, IEntityCharge instance, Direction side) {
             CompoundNBT tag = new CompoundNBT();
-            tag.putInt("health", instance.getCharge());
+            tag.putInt("charge", instance.getCharge());
             return tag;
         }
 
         @Override
         public void readNBT(Capability<IEntityCharge> capability, IEntityCharge instance, Direction side, INBT nbt) {
-            int health = ((CompoundNBT) nbt).getInt("health");
-            instance.setCharge(health);
+            int charge = ((CompoundNBT) nbt).getInt("charge");
+            instance.setCharge(charge);
         }
     }
 }

@@ -41,6 +41,13 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
+    public void remove() {
+        super.remove();
+        handler.invalidate();
+        energy.invalidate();
+    }
+
+    @Override
     public void tick() {
         if (world.isRemote) {
             return;
@@ -154,10 +161,10 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return handler.cast();
         }
-        if (cap.equals(CapabilityEnergy.ENERGY)) {
+        if (cap == CapabilityEnergy.ENERGY) {
             return energy.cast();
         }
         return super.getCapability(cap, side);

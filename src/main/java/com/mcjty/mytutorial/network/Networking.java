@@ -1,7 +1,6 @@
 package com.mcjty.mytutorial.network;
 
 import com.mcjty.mytutorial.MyTutorial;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkDirection;

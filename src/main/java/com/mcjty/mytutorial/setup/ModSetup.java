@@ -6,8 +6,10 @@ import com.mcjty.mytutorial.data.CapabilityEntityCharge;
 import com.mcjty.mytutorial.data.ChargeEventHandler;
 import com.mcjty.mytutorial.dimension.TutorialBiomeProvider;
 import com.mcjty.mytutorial.dimension.TutorialChunkGenerator;
+import com.mcjty.mytutorial.entities.WeirdMobEntity;
 import com.mcjty.mytutorial.network.Networking;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -36,10 +38,14 @@ public class ModSetup {
         MinecraftForge.EVENT_BUS.addListener(ChargeEventHandler::onAttackEvent);
         MinecraftForge.EVENT_BUS.addListener(ChargeEventHandler::onDeathEvent);
 
-        Registry.register(Registry.CHUNK_GENERATOR_CODEC, new ResourceLocation(MyTutorial.MODID, "chunkgen"),
-                TutorialChunkGenerator.CODEC);
-        Registry.register(Registry.BIOME_PROVIDER_CODEC, new ResourceLocation(MyTutorial.MODID, "biomes"),
-                TutorialBiomeProvider.CODEC);
+        event.enqueueWork(() -> {
+            GlobalEntityTypeAttributes.put(Registration.WEIRDMOB.get(), WeirdMobEntity.prepareAttributes().create());
+
+            Registry.register(Registry.CHUNK_GENERATOR_CODEC, new ResourceLocation(MyTutorial.MODID, "chunkgen"),
+                    TutorialChunkGenerator.CODEC);
+            Registry.register(Registry.BIOME_PROVIDER_CODEC, new ResourceLocation(MyTutorial.MODID, "biomes"),
+                    TutorialBiomeProvider.CODEC);
+        });
     }
 
     @SubscribeEvent

@@ -4,17 +4,19 @@ import com.mcjty.mytutorial.MyTutorial;
 import com.mcjty.mytutorial.commands.ModCommands;
 import com.mcjty.mytutorial.data.CapabilityEntityCharge;
 import com.mcjty.mytutorial.data.ChargeEventHandler;
-import com.mcjty.mytutorial.dimension.ModDimensions;
+import com.mcjty.mytutorial.dimension.TutorialBiomeProvider;
+import com.mcjty.mytutorial.dimension.TutorialChunkGenerator;
 import com.mcjty.mytutorial.network.Networking;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.DimensionManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.RegisterDimensionsEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 @Mod.EventBusSubscriber(modid = MyTutorial.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModSetup {
@@ -30,19 +32,18 @@ public class ModSetup {
         Networking.registerMessages();
         CapabilityEntityCharge.register();
 
-        MinecraftForge.EVENT_BUS.addListener(ChargeEventHandler::onAttachCapabilitiesEvent);
+        MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, ChargeEventHandler::onAttachCapabilitiesEvent);
         MinecraftForge.EVENT_BUS.addListener(ChargeEventHandler::onAttackEvent);
         MinecraftForge.EVENT_BUS.addListener(ChargeEventHandler::onDeathEvent);
+
+        Registry.register(Registry.CHUNK_GENERATOR_CODEC, new ResourceLocation(MyTutorial.MODID, "chunkgen"),
+                TutorialChunkGenerator.CODEC.codec());
+        Registry.register(Registry.BIOME_PROVIDER_CODEC, new ResourceLocation(MyTutorial.MODID, "biomes"),
+                TutorialBiomeProvider.CODEC.codec());
     }
 
     @SubscribeEvent
-    public static void serverLoad(FMLServerStartingEvent event) {
-        ModCommands.register(event.getCommandDispatcher());
+    public static void serverLoad(RegisterCommandsEvent event) {
+        ModCommands.register(event.getDispatcher());
     }
-
-    @SubscribeEvent
-    public static void onDimensionRegistry(RegisterDimensionsEvent event) {
-        ModDimensions.DIMENSION_TYPE = DimensionManager.registerOrGetDimension(ModDimensions.DIMENSION_ID, Registration.DIMENSION.get(), null, true);
-    }
-
 }

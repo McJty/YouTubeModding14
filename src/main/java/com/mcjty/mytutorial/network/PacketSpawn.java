@@ -3,9 +3,11 @@ package com.mcjty.mytutorial.network;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -16,16 +18,16 @@ import java.util.function.Supplier;
 public class PacketSpawn {
 
     private final ResourceLocation id;
-    private final DimensionType type;
+    private final RegistryKey<World> type;
     private final BlockPos pos;
 
     public PacketSpawn(PacketBuffer buf) {
         id = buf.readResourceLocation();
-        type = DimensionType.getById(buf.readInt());
+        type = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, buf.readResourceLocation());
         pos = buf.readBlockPos();
     }
 
-    public PacketSpawn(ResourceLocation id, DimensionType type, BlockPos pos) {
+    public PacketSpawn(ResourceLocation id, RegistryKey<World> type, BlockPos pos) {
         this.id = id;
         this.type = type;
         this.pos = pos;
@@ -33,7 +35,7 @@ public class PacketSpawn {
 
     public void toBytes(PacketBuffer buf) {
         buf.writeResourceLocation(id);
-        buf.writeInt(type.getId());
+        buf.writeResourceLocation(type.getLocation());
         buf.writeBlockPos(pos);
     }
 

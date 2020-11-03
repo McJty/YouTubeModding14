@@ -11,7 +11,8 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class CommandTpDim implements Command<CommandSource> {
 
@@ -28,11 +29,14 @@ public class CommandTpDim implements Command<CommandSource> {
         ServerPlayerEntity player = context.getSource().asPlayer();
         int x = player.getPosition().getX();
         int z = player.getPosition().getZ();
-        if (player.dimension.equals(ModDimensions.DIMENSION_TYPE)) {
-            TeleportationTools.teleport(player, DimensionType.OVERWORLD, new BlockPos(x, 200, z));
+        if (player.getEntityWorld().getDimensionKey().equals(ModDimensions.TUTDIM)) {
+            ServerWorld world = player.getServer().getWorld(World.OVERWORLD);
+            TeleportationTools.teleport(player, world, new BlockPos(x, 200, z));
         } else {
-            TeleportationTools.teleport(player, ModDimensions.DIMENSION_TYPE, new BlockPos(x, 200, z));
+            ServerWorld world = player.getServer().getWorld(ModDimensions.TUTDIM);
+            TeleportationTools.teleport(player, world, new BlockPos(x, 200, z));
         }
         return 0;
     }
+
 }

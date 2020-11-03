@@ -106,12 +106,12 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
-    public void read(CompoundNBT tag) {
+    public void read(BlockState state, CompoundNBT tag) {
         itemHandler.deserializeNBT(tag.getCompound("inv"));
         energyStorage.deserializeNBT(tag.getCompound("energy"));
 
         counter = tag.getInt("counter");
-        super.read(tag);
+        super.read(state, tag);
     }
 
     @Override

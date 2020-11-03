@@ -1,0 +1,6 @@
+{
+  "type": "mytutorial:tutdim",
+  "generator": {
+    "type": "mytutorial:chunkgen"
+  }
+}

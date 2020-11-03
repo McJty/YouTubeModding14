@@ -5,10 +5,10 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.item.Items;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.client.event.RenderLivingEvent;
 
 public class AfterLivingRenderer {

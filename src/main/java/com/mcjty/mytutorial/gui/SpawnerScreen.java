@@ -3,11 +3,13 @@ package com.mcjty.mytutorial.gui;
 import com.mcjty.mytutorial.MyTutorial;
 import com.mcjty.mytutorial.network.Networking;
 import com.mcjty.mytutorial.network.PacketSpawn;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class SpawnerScreen extends Screen {
@@ -27,11 +29,11 @@ public class SpawnerScreen extends Screen {
         int relX = (this.width - WIDTH) / 2;
         int relY = (this.height - HEIGHT) / 2;
 
-        addButton(new Button(relX + 10, relY + 10, 160, 20, "Skeleton", button -> spawn("minecraft:skeleton")));
-        addButton(new Button(relX + 10, relY + 37, 160, 20, "Zombie", button -> spawn("minecraft:zombie")));
-        addButton(new Button(relX + 10, relY + 64, 160, 20, "Cow", button -> spawn("minecraft:cow")));
-        addButton(new Button(relX + 10, relY + 91, 160, 20, "Sheep", button -> spawn("minecraft:sheep")));
-        addButton(new Button(relX + 10, relY + 118, 160, 20, "Chicken", button -> spawn("minecraft:chicken")));
+        addButton(new Button(relX + 10, relY + 10, 160, 20, new StringTextComponent("Skeleton"), button -> spawn("minecraft:skeleton")));
+        addButton(new Button(relX + 10, relY + 37, 160, 20, new StringTextComponent("Zombie"), button -> spawn("minecraft:zombie")));
+        addButton(new Button(relX + 10, relY + 64, 160, 20, new StringTextComponent("Cow"), button -> spawn("minecraft:cow")));
+        addButton(new Button(relX + 10, relY + 91, 160, 20, new StringTextComponent("Sheep"), button -> spawn("minecraft:sheep")));
+        addButton(new Button(relX + 10, relY + 118, 160, 20, new StringTextComponent("Chicken"), button -> spawn("minecraft:chicken")));
     }
 
     @Override
@@ -40,18 +42,18 @@ public class SpawnerScreen extends Screen {
     }
 
     private void spawn(String id) {
-        Networking.sendToServer(new PacketSpawn(new ResourceLocation(id), minecraft.player.dimension, minecraft.player.getPosition()));
+        Networking.sendToServer(new PacketSpawn(new ResourceLocation(id), minecraft.player.getEntityWorld().getDimensionKey(), minecraft.player.getPosition()));
         minecraft.displayGuiScreen(null);
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GUI);
         int relX = (this.width - WIDTH) / 2;
         int relY = (this.height - HEIGHT) / 2;
-        this.blit(relX, relY, 0, 0, WIDTH, HEIGHT);
-        super.render(mouseX, mouseY, partialTicks);
+        this.blit(matrixStack, relX, relY, 0, 0, WIDTH, HEIGHT);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 
 

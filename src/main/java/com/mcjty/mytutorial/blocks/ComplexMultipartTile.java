@@ -51,8 +51,8 @@ public class ComplexMultipartTile extends TileEntity {
     }
 
     @Override
-    public void read(CompoundNBT compound) {
-        super.read(compound);
+    public void read(BlockState state, CompoundNBT compound) {
+        super.read(state, compound);
         modes[0] = Mode.values()[compound.getByte("m0")];
         modes[1] = Mode.values()[compound.getByte("m1")];
         modes[2] = Mode.values()[compound.getByte("m2")];
@@ -72,6 +72,7 @@ public class ComplexMultipartTile extends TileEntity {
         return super.write(compound);
     }
 
+
     public enum Mode implements IStringSerializable {
         MODE_NONE("none"),
         MODE_INPUT("input"),   // Blue
@@ -84,14 +85,14 @@ public class ComplexMultipartTile extends TileEntity {
         }
 
         @Override
-        public String getName() {
+        public String getString() {
             return name;
         }
 
 
         @Override
         public String toString() {
-            return getName();
+            return getString();
         }
     }
 }

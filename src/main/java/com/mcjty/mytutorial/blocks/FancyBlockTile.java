@@ -49,11 +49,11 @@ public class FancyBlockTile extends TileEntity {
     }
 
     @Override
-    public void handleUpdateTag(CompoundNBT tag) {
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
         // This is actually the default but placed here so you
         // know this is the place to potentially have a lighter read() that only
         // considers things needed client-side
-        read(tag);
+        read(state, tag);
     }
 
     // The getUpdatePacket()/onDataPacket() pair is used when a block update happens on the client
@@ -70,7 +70,7 @@ public class FancyBlockTile extends TileEntity {
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         BlockState oldMimic = mimic;
         CompoundNBT tag = pkt.getNbtCompound();
-        handleUpdateTag(tag);
+        handleUpdateTag(getBlockState(), tag);
         if (!Objects.equals(oldMimic, mimic)) {
             ModelDataManager.requestModelDataRefresh(this);
             world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
@@ -86,8 +86,8 @@ public class FancyBlockTile extends TileEntity {
     }
 
     @Override
-    public void read(CompoundNBT tag) {
-        super.read(tag);
+    public void read(BlockState state, CompoundNBT tag) {
+        super.read(state, tag);
         readMimic(tag);
     }
 

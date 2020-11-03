@@ -1,21 +1,35 @@
 package com.mcjty.mytutorial.dimension;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryLookupCodec;
+import net.minecraft.world.Blockreader;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.biome.provider.BiomeProvider;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.WorldGenRegion;
+import net.minecraft.world.gen.feature.structure.StructureManager;
+import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 
-public class TutorialChunkGenerator extends ChunkGenerator<TutorialChunkGenerator.Config> {
+public class TutorialChunkGenerator extends ChunkGenerator {
 
-    public TutorialChunkGenerator(IWorld world, BiomeProvider provider) {
-        super(world, provider, Config.createDefault());
+    public static final MapCodec<TutorialChunkGenerator> CODEC = RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
+            .xmap(TutorialChunkGenerator::new, TutorialChunkGenerator::getBiomeRegistry);
+
+    public TutorialChunkGenerator(Registry<Biome> registry) {
+        super(new TutorialBiomeProvider(registry), new DimensionStructuresSettings(false));
+    }
+
+    public Registry<Biome> getBiomeRegistry() {
+        return ((TutorialBiomeProvider)biomeProvider).getBiomeRegistry();
     }
 
     @Override
@@ -45,32 +59,30 @@ public class TutorialChunkGenerator extends ChunkGenerator<TutorialChunkGenerato
                 }
             }
         }
+    }
+
+    @Override
+    protected Codec<? extends ChunkGenerator> func_230347_a_() {
+        return CODEC.codec();
+    }
+
+    @Override
+    public ChunkGenerator func_230349_a_(long seed) {
+        return new TutorialChunkGenerator(getBiomeRegistry());
+    }
+
+    @Override
+    public void func_230352_b_(IWorld world, StructureManager structureManager, IChunk chunk) {
 
     }
 
     @Override
-    public void makeBase(IWorld worldIn, IChunk chunkIn) {
-
-    }
-
-    @Override
-    public int func_222529_a(int p_222529_1_, int p_222529_2_, Heightmap.Type heightmapType) {
+    public int getHeight(int x, int z, Heightmap.Type heightmapType) {
         return 0;
     }
 
     @Override
-    public int getGroundHeight() {
-        return world.getSeaLevel()+1;
-    }
-
-    public static class Config extends GenerationSettings {
-
-        public static Config createDefault() {
-            Config config = new Config();
-            config.setDefaultBlock(Blocks.DIAMOND_BLOCK.getDefaultState());
-            config.setDefaultFluid(Blocks.LAVA.getDefaultState());
-            return config;
-        }
-
+    public IBlockReader func_230348_a_(int p_230348_1_, int p_230348_2_) {
+        return new Blockreader(new BlockState[0]);
     }
 }

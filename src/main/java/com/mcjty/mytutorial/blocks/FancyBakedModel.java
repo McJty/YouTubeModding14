@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
@@ -24,7 +24,10 @@ import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class FancyBakedModel implements IDynamicBakedModel {
 
@@ -35,11 +38,11 @@ public class FancyBakedModel implements IDynamicBakedModel {
     }
 
     @Override
-    public boolean func_230044_c_() {
+    public boolean isSideLit() {
         return false;
     }
 
-    private void putVertex(BakedQuadBuilder builder, Vec3d normal,
+    private void putVertex(BakedQuadBuilder builder, Vector3d normal,
                            double x, double y, double z, float u, float v, TextureAtlasSprite sprite, float r, float g, float b) {
 
         ImmutableList<VertexFormatElement> elements = builder.getVertexFormat().getElements().asList();
@@ -77,8 +80,8 @@ public class FancyBakedModel implements IDynamicBakedModel {
         }
     }
 
-    private BakedQuad createQuad(Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite sprite) {
-        Vec3d normal = v3.subtract(v2).crossProduct(v1.subtract(v2)).normalize();
+    private BakedQuad createQuad(Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, TextureAtlasSprite sprite) {
+        Vector3d normal = v3.subtract(v2).crossProduct(v1.subtract(v2)).normalize();
         int tw = sprite.getWidth();
         int th = sprite.getHeight();
 
@@ -91,8 +94,8 @@ public class FancyBakedModel implements IDynamicBakedModel {
         return builder.build();
     }
 
-    private static Vec3d v(double x, double y, double z) {
-        return new Vec3d(x, y, z);
+    private static Vector3d v(double x, double y, double z) {
+        return new Vector3d(x, y, z);
     }
 
 

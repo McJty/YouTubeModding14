@@ -17,7 +17,6 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -36,7 +35,7 @@ public class FirstBlock extends Block {
         super(Properties.create(Material.IRON)
                 .sound(SoundType.METAL)
                 .hardnessAndResistance(2.0f)
-                .lightValue(14)
+                .setLightLevel(state -> state.get(BlockStateProperties.POWERED) ? 14 : 0)
         );
     }
 
@@ -45,10 +44,10 @@ public class FirstBlock extends Block {
         list.add(new TranslationTextComponent("message.firstblock", Integer.toString(Config.FIRSTBLOCK_GENERATE.get())));
     }
 
-    @Override
-    public int getLightValue(BlockState state) {
-        return state.get(BlockStateProperties.POWERED) ? super.getLightValue(state) : 0;
-    }
+//    @Override
+//    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+//        return state.get(BlockStateProperties.POWERED) ? super.getLightValue(state, world, pos) : 0;
+//    }
 
     @Override
     public boolean hasTileEntity(BlockState state) {

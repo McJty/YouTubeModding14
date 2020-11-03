@@ -1,7 +1,6 @@
 package com.mcjty.mytutorial.setup;
 
 import com.mcjty.mytutorial.blocks.*;
-import com.mcjty.mytutorial.dimension.TutorialModDimension;
 import com.mcjty.mytutorial.entities.WeirdMobEntity;
 import com.mcjty.mytutorial.items.FirstItem;
 import com.mcjty.mytutorial.items.WeirdMobEggItem;
@@ -14,7 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -30,7 +28,6 @@ public class Registration {
     private static final DeferredRegister<TileEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, MODID);
     private static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, MODID);
     private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
-    private static final DeferredRegister<ModDimension> DIMENSIONS = DeferredRegister.create(ForgeRegistries.MOD_DIMENSIONS, MODID);
 
     public static void init() {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -38,7 +35,6 @@ public class Registration {
         TILES.register(FMLJavaModLoadingContext.get().getModEventBus());
         CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        DIMENSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     public static final RegistryObject<FirstBlock> FIRSTBLOCK = BLOCKS.register("firstblock", FirstBlock::new);
@@ -70,7 +66,5 @@ public class Registration {
             .size(.5f, .5f)
             .setShouldReceiveVelocityUpdates(false)
             .build("weirdmob"));
-
-    public static final RegistryObject<TutorialModDimension> DIMENSION = DIMENSIONS.register("dimension", TutorialModDimension::new);
 
 }

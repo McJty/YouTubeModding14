@@ -1,34 +1,40 @@
 package com.mcjty.mytutorial.dimension;
 
-import net.minecraft.block.BlockState;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryLookupCodec;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.feature.structure.Structure;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TutorialBiomeProvider extends BiomeProvider {
 
+    public static final MapCodec<TutorialBiomeProvider> CODEC = RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
+            .xmap(TutorialBiomeProvider::new, TutorialBiomeProvider::getBiomeRegistry);
+
     private final Biome biome;
-    private static final List<Biome> SPAWN = Collections.singletonList(Biomes.PLAINS);
+    private final Registry<Biome> biomeRegistry;
+    private static final List<RegistryKey<Biome>> SPAWN = Collections.singletonList(Biomes.PLAINS);
 
-    public TutorialBiomeProvider() {
-        super(new HashSet<>(SPAWN));
-        biome = Biomes.PLAINS;
+    public TutorialBiomeProvider(Registry<Biome> biomeRegistry) {
+        super(getStartBiomes(biomeRegistry));
+        this.biomeRegistry = biomeRegistry;
+        biome = biomeRegistry.getOrDefault(Biomes.PLAINS.getLocation());
     }
 
-    @Override
-    public Biome getNoiseBiome(int x, int y, int z) {
-        return biome;
+    private static List<Biome> getStartBiomes(Registry<Biome> registry) {
+        return SPAWN.stream().map(s -> registry.getOrDefault(s.getLocation())).collect(Collectors.toList());
     }
 
-    @Override
-    public List<Biome> getBiomesToSpawnIn() {
-        return SPAWN;
+    public Registry<Biome> getBiomeRegistry() {
+        return biomeRegistry;
     }
 
     @Override
@@ -37,11 +43,17 @@ public class TutorialBiomeProvider extends BiomeProvider {
     }
 
     @Override
-    public Set<BlockState> getSurfaceBlocks() {
-        if (topBlocksCache.isEmpty()) {
-            topBlocksCache.add(biome.getSurfaceBuilderConfig().getTop());
-        }
+    protected Codec<? extends BiomeProvider> getBiomeProviderCodec() {
+        return CODEC.codec();
+    }
 
-        return topBlocksCache;
+    @Override
+    public BiomeProvider getBiomeProvider(long seed) {
+        return this;
+    }
+
+    @Override
+    public Biome getNoiseBiome(int x, int y, int z) {
+        return biome;
     }
 }

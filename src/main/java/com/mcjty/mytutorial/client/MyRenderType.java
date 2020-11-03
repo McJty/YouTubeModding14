@@ -19,7 +19,7 @@ public class MyRenderType extends RenderType {
     public static final RenderType OVERLAY_LINES = makeType("overlay_lines",
             DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINES, 256,
             RenderType.State.getBuilder().line(THICK_LINES)
-                    .layer(PROJECTION_LAYERING)
+                    .layer(field_239235_M_)
                     .transparency(TRANSLUCENT_TRANSPARENCY)
                     .texture(NO_TEXTURE)
                     .depthTest(DEPTH_ALWAYS)

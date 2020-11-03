@@ -1,7 +1,6 @@
 package com.mcjty.mytutorial.dimension;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryLookupCodec;
@@ -16,8 +15,8 @@ import java.util.stream.Collectors;
 
 public class TutorialBiomeProvider extends BiomeProvider {
 
-    public static final MapCodec<TutorialBiomeProvider> CODEC = RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
-            .xmap(TutorialBiomeProvider::new, TutorialBiomeProvider::getBiomeRegistry);
+    public static final Codec<TutorialBiomeProvider> CODEC = RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
+            .xmap(TutorialBiomeProvider::new, TutorialBiomeProvider::getBiomeRegistry).codec();
 
     private final Biome biome;
     private final Registry<Biome> biomeRegistry;
@@ -44,7 +43,7 @@ public class TutorialBiomeProvider extends BiomeProvider {
 
     @Override
     protected Codec<? extends BiomeProvider> getBiomeProviderCodec() {
-        return CODEC.codec();
+        return CODEC;
     }
 
     @Override

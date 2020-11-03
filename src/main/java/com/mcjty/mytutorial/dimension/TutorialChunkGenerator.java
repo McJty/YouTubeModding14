@@ -1,7 +1,6 @@
 package com.mcjty.mytutorial.dimension;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -21,8 +20,8 @@ import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 
 public class TutorialChunkGenerator extends ChunkGenerator {
 
-    public static final MapCodec<TutorialChunkGenerator> CODEC = RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
-            .xmap(TutorialChunkGenerator::new, TutorialChunkGenerator::getBiomeRegistry);
+    public static final Codec<TutorialChunkGenerator> CODEC = RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
+            .xmap(TutorialChunkGenerator::new, TutorialChunkGenerator::getBiomeRegistry).codec();
 
     public TutorialChunkGenerator(Registry<Biome> registry) {
         super(new TutorialBiomeProvider(registry), new DimensionStructuresSettings(false));
@@ -63,7 +62,7 @@ public class TutorialChunkGenerator extends ChunkGenerator {
 
     @Override
     protected Codec<? extends ChunkGenerator> func_230347_a_() {
-        return CODEC.codec();
+        return CODEC;
     }
 
     @Override

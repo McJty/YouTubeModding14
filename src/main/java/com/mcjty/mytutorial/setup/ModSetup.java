@@ -37,9 +37,9 @@ public class ModSetup {
         MinecraftForge.EVENT_BUS.addListener(ChargeEventHandler::onDeathEvent);
 
         Registry.register(Registry.CHUNK_GENERATOR_CODEC, new ResourceLocation(MyTutorial.MODID, "chunkgen"),
-                TutorialChunkGenerator.CODEC.codec());
+                TutorialChunkGenerator.CODEC);
         Registry.register(Registry.BIOME_PROVIDER_CODEC, new ResourceLocation(MyTutorial.MODID, "biomes"),
-                TutorialBiomeProvider.CODEC.codec());
+                TutorialBiomeProvider.CODEC);
     }
 
     @SubscribeEvent

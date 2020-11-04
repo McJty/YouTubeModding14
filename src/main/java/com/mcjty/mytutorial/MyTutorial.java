@@ -17,7 +17,7 @@ public class MyTutorial {
 
     public static final String MODID = "mytutorial";
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public MyTutorial() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);

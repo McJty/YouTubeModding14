@@ -2,6 +2,10 @@
   "type": "mytutorial:tutdim",
   "generator": {
     "type": "mytutorial:chunkgen",
-    "height": 16
+    "settings": {
+      "base": 65,
+      "verticalvariance": 16,
+      "horizontalvariance": 10
+    }
   }
 }

@@ -1,5 +1,6 @@
 package com.mcjty.mytutorial.dimension;
 
+import com.mcjty.mytutorial.MyTutorial;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
@@ -21,28 +22,33 @@ import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 
 public class TutorialChunkGenerator extends ChunkGenerator {
 
-//    public static final Codec<TutorialChunkGenerator> CODEC = RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
-//            .xmap(TutorialChunkGenerator::new, TutorialChunkGenerator::getBiomeRegistry).codec();
+    private static final Codec<Settings> SETTINGS_CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(
+                    Codec.INT.fieldOf("base").forGetter(Settings::getBaseHeight),
+                    Codec.FLOAT.fieldOf("verticalvariance").forGetter(Settings::getVerticalVariance),
+                    Codec.FLOAT.fieldOf("horizontalvariance").forGetter(Settings::getHorizontalVariance)
+            ).apply(instance, Settings::new));
 
     public static final Codec<TutorialChunkGenerator> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY).forGetter(TutorialChunkGenerator::getBiomeRegistry),
-                    Codec.FLOAT.fieldOf("height").forGetter(TutorialChunkGenerator::getSineHeight)
+                    SETTINGS_CODEC.fieldOf("settings").forGetter(TutorialChunkGenerator::getSettings)
             ).apply(instance, TutorialChunkGenerator::new));
 
-    private float sineHeight;
+    private final Settings settings;
 
-    public TutorialChunkGenerator(Registry<Biome> registry, float sineHeight) {
+    public TutorialChunkGenerator(Registry<Biome> registry, Settings settings) {
         super(new TutorialBiomeProvider(registry), new DimensionStructuresSettings(false));
-        this.sineHeight = sineHeight;
+        this.settings = settings;
+        MyTutorial.LOGGER.info("Chunk generator settings: " + settings.getBaseHeight() + ", " + settings.getHorizontalVariance() + ", " + settings.getVerticalVariance());
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 
     public Registry<Biome> getBiomeRegistry() {
         return ((TutorialBiomeProvider)biomeProvider).getBiomeRegistry();
-    }
-
-    public float getSineHeight() {
-        return sineHeight;
     }
 
     @Override
@@ -62,11 +68,14 @@ public class TutorialChunkGenerator extends ChunkGenerator {
             }
         }
 
+        int baseHeight = settings.getBaseHeight();
+        float verticalVariance = settings.getVerticalVariance();
+        float horizontalVariance = settings.getHorizontalVariance();
         for (x = 0; x < 16; x++) {
             for (z = 0; z < 16; z++) {
                 int realx = chunkpos.x * 16 + x;
                 int realz = chunkpos.z * 16 + z;
-                int height = (int) (65 + Math.sin(realx / 20.0f)*sineHeight + Math.cos(realz / 20.0f)*sineHeight);
+                int height = (int) (baseHeight + Math.sin(realx / horizontalVariance)*verticalVariance + Math.cos(realz / horizontalVariance)*verticalVariance);
                 for (int y = 1 ; y < height ; y++) {
                     chunk.setBlockState(pos.setPos(x, y, z), stone, false);
                 }
@@ -81,7 +90,7 @@ public class TutorialChunkGenerator extends ChunkGenerator {
 
     @Override
     public ChunkGenerator func_230349_a_(long seed) {
-        return new TutorialChunkGenerator(getBiomeRegistry(), sineHeight);
+        return new TutorialChunkGenerator(getBiomeRegistry(), settings);
     }
 
     @Override
@@ -97,5 +106,29 @@ public class TutorialChunkGenerator extends ChunkGenerator {
     @Override
     public IBlockReader func_230348_a_(int p_230348_1_, int p_230348_2_) {
         return new Blockreader(new BlockState[0]);
+    }
+
+    private static class Settings {
+        private final int baseHeight;
+        private final float verticalVariance;
+        private final float horizontalVariance;
+
+        public Settings(int baseHeight, float verticalVariance, float horizontalVariance) {
+            this.baseHeight = baseHeight;
+            this.verticalVariance = verticalVariance;
+            this.horizontalVariance = horizontalVariance;
+        }
+
+        public float getVerticalVariance() {
+            return verticalVariance;
+        }
+
+        public int getBaseHeight() {
+            return baseHeight;
+        }
+
+        public float getHorizontalVariance() {
+            return horizontalVariance;
+        }
     }
 }

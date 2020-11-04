@@ -1,6 +1,7 @@
 {
   "type": "mytutorial:tutdim",
   "generator": {
-    "type": "mytutorial:chunkgen"
+    "type": "mytutorial:chunkgen",
+    "height": 16
   }
 }

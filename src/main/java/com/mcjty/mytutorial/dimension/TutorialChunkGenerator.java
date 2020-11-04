@@ -1,6 +1,7 @@
 package com.mcjty.mytutorial.dimension;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -20,15 +21,28 @@ import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 
 public class TutorialChunkGenerator extends ChunkGenerator {
 
-    public static final Codec<TutorialChunkGenerator> CODEC = RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
-            .xmap(TutorialChunkGenerator::new, TutorialChunkGenerator::getBiomeRegistry).codec();
+//    public static final Codec<TutorialChunkGenerator> CODEC = RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
+//            .xmap(TutorialChunkGenerator::new, TutorialChunkGenerator::getBiomeRegistry).codec();
 
-    public TutorialChunkGenerator(Registry<Biome> registry) {
+    public static final Codec<TutorialChunkGenerator> CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(
+                    RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY).forGetter(TutorialChunkGenerator::getBiomeRegistry),
+                    Codec.FLOAT.fieldOf("height").forGetter(TutorialChunkGenerator::getSineHeight)
+            ).apply(instance, TutorialChunkGenerator::new));
+
+    private float sineHeight;
+
+    public TutorialChunkGenerator(Registry<Biome> registry, float sineHeight) {
         super(new TutorialBiomeProvider(registry), new DimensionStructuresSettings(false));
+        this.sineHeight = sineHeight;
     }
 
     public Registry<Biome> getBiomeRegistry() {
         return ((TutorialBiomeProvider)biomeProvider).getBiomeRegistry();
+    }
+
+    public float getSineHeight() {
+        return sineHeight;
     }
 
     @Override
@@ -52,7 +66,7 @@ public class TutorialChunkGenerator extends ChunkGenerator {
             for (z = 0; z < 16; z++) {
                 int realx = chunkpos.x * 16 + x;
                 int realz = chunkpos.z * 16 + z;
-                int height = (int) (65 + Math.sin(realx / 20.0f)*10 + Math.cos(realz / 20.0f)*10);
+                int height = (int) (65 + Math.sin(realx / 20.0f)*sineHeight + Math.cos(realz / 20.0f)*sineHeight);
                 for (int y = 1 ; y < height ; y++) {
                     chunk.setBlockState(pos.setPos(x, y, z), stone, false);
                 }
@@ -67,7 +81,7 @@ public class TutorialChunkGenerator extends ChunkGenerator {
 
     @Override
     public ChunkGenerator func_230349_a_(long seed) {
-        return new TutorialChunkGenerator(getBiomeRegistry());
+        return new TutorialChunkGenerator(getBiomeRegistry(), sineHeight);
     }
 
     @Override

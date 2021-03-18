@@ -31,8 +31,8 @@ public class TutorialChunkGenerator extends ChunkGenerator {
 
     public static final Codec<TutorialChunkGenerator> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
-                    RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY).forGetter(TutorialChunkGenerator::getBiomeRegistry),
-                    SETTINGS_CODEC.fieldOf("settings").forGetter(TutorialChunkGenerator::getSettings)
+                    RegistryLookupCodec.create(Registry.BIOME_REGISTRY).forGetter(TutorialChunkGenerator::getBiomeRegistry),
+                    SETTINGS_CODEC.fieldOf("settings").forGetter(TutorialChunkGenerator::getTutorialSettings)
             ).apply(instance, TutorialChunkGenerator::new));
 
     private final Settings settings;
@@ -43,18 +43,18 @@ public class TutorialChunkGenerator extends ChunkGenerator {
         MyTutorial.LOGGER.info("Chunk generator settings: " + settings.getBaseHeight() + ", " + settings.getHorizontalVariance() + ", " + settings.getVerticalVariance());
     }
 
-    public Settings getSettings() {
+    public Settings getTutorialSettings() {
         return settings;
     }
 
     public Registry<Biome> getBiomeRegistry() {
-        return ((TutorialBiomeProvider)biomeProvider).getBiomeRegistry();
+        return ((TutorialBiomeProvider)biomeSource).getBiomeRegistry();
     }
 
     @Override
-    public void generateSurface(WorldGenRegion region, IChunk chunk) {
-        BlockState bedrock = Blocks.BEDROCK.getDefaultState();
-        BlockState stone = Blocks.STONE.getDefaultState();
+    public void buildSurfaceAndBedrock(WorldGenRegion region, IChunk chunk) {
+        BlockState bedrock = Blocks.BEDROCK.defaultBlockState();
+        BlockState stone = Blocks.STONE.defaultBlockState();
         ChunkPos chunkpos = chunk.getPos();
 
         BlockPos.Mutable pos = new BlockPos.Mutable();
@@ -64,7 +64,7 @@ public class TutorialChunkGenerator extends ChunkGenerator {
 
         for (x = 0; x < 16; x++) {
             for (z = 0; z < 16; z++) {
-                chunk.setBlockState(pos.setPos(x, 0, z), bedrock, false);
+                chunk.setBlockState(pos.set(x, 0, z), bedrock, false);
             }
         }
 
@@ -77,34 +77,34 @@ public class TutorialChunkGenerator extends ChunkGenerator {
                 int realz = chunkpos.z * 16 + z;
                 int height = (int) (baseHeight + Math.sin(realx / horizontalVariance)*verticalVariance + Math.cos(realz / horizontalVariance)*verticalVariance);
                 for (int y = 1 ; y < height ; y++) {
-                    chunk.setBlockState(pos.setPos(x, y, z), stone, false);
+                    chunk.setBlockState(pos.set(x, y, z), stone, false);
                 }
             }
         }
     }
 
     @Override
-    protected Codec<? extends ChunkGenerator> func_230347_a_() {
+    protected Codec<? extends ChunkGenerator> codec() {
         return CODEC;
     }
 
     @Override
-    public ChunkGenerator func_230349_a_(long seed) {
+    public ChunkGenerator withSeed(long seed) {
         return new TutorialChunkGenerator(getBiomeRegistry(), settings);
     }
 
     @Override
-    public void func_230352_b_(IWorld world, StructureManager structureManager, IChunk chunk) {
+    public void fillFromNoise(IWorld world, StructureManager structureManager, IChunk chunk) {
 
     }
 
     @Override
-    public int getHeight(int x, int z, Heightmap.Type heightmapType) {
+    public int getBaseHeight(int x, int z, Heightmap.Type heightmapType) {
         return 0;
     }
 
     @Override
-    public IBlockReader func_230348_a_(int p_230348_1_, int p_230348_2_) {
+    public IBlockReader getBaseColumn(int p_230348_1_, int p_230348_2_) {
         return new Blockreader(new BlockState[0]);
     }
 

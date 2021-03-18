@@ -34,11 +34,11 @@ public class FancyBakedModel implements IDynamicBakedModel {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MyTutorial.MODID, "block/fancyblock");
 
     private TextureAtlasSprite getTexture() {
-        return Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(TEXTURE);
+        return Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(TEXTURE);
     }
 
     @Override
-    public boolean isSideLit() {
+    public boolean usesBlockLight() {
         return false;
     }
 
@@ -58,8 +58,8 @@ public class FancyBakedModel implements IDynamicBakedModel {
                 case UV:
                     switch (e.getIndex()) {
                         case 0:
-                            float iu = sprite.getInterpolatedU(u);
-                            float iv = sprite.getInterpolatedV(v);
+                            float iu = sprite.getU(u);
+                            float iv = sprite.getV(v);
                             builder.put(j, iu, iv);
                             break;
                         case 2:
@@ -81,12 +81,12 @@ public class FancyBakedModel implements IDynamicBakedModel {
     }
 
     private BakedQuad createQuad(Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, TextureAtlasSprite sprite) {
-        Vector3d normal = v3.subtract(v2).crossProduct(v1.subtract(v2)).normalize();
+        Vector3d normal = v3.subtract(v2).cross(v1.subtract(v2)).normalize();
         int tw = sprite.getWidth();
         int th = sprite.getHeight();
 
         BakedQuadBuilder builder = new BakedQuadBuilder(sprite);
-        builder.setQuadOrientation(Direction.getFacingFromVector(normal.x, normal.y, normal.z));
+        builder.setQuadOrientation(Direction.getNearest(normal.x, normal.y, normal.z));
         putVertex(builder, normal, v1.x, v1.y, v1.z, 0, 0, sprite, 1.0f, 1.0f, 1.0f);
         putVertex(builder, normal, v2.x, v2.y, v2.z, 0, th, sprite, 1.0f, 1.0f, 1.0f);
         putVertex(builder, normal, v3.x, v3.y, v3.z, tw, th, sprite, 1.0f, 1.0f, 1.0f);
@@ -108,7 +108,7 @@ public class FancyBakedModel implements IDynamicBakedModel {
         BlockState mimic = extraData.getData(FancyBlockTile.MIMIC);
         if (mimic != null && !(mimic.getBlock() instanceof FancyBlock)) {
             if (layer == null || RenderTypeLookup.canRenderInLayer(mimic, layer)) {
-                IBakedModel model = Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelShapes().getModel(mimic);
+                IBakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getBlockModel(mimic);
                 try {
                     return model.getQuads(mimic, side, rand, EmptyModelData.INSTANCE);
                 } catch (Exception e) {
@@ -118,7 +118,7 @@ public class FancyBakedModel implements IDynamicBakedModel {
             return Collections.emptyList();
         }
 
-        if (side != null || (layer != null && !layer.equals(RenderType.getSolid()))) {
+        if (side != null || (layer != null && !layer.equals(RenderType.solid()))) {
             return Collections.emptyList();
         }
 
@@ -137,7 +137,7 @@ public class FancyBakedModel implements IDynamicBakedModel {
     }
 
     @Override
-    public boolean isAmbientOcclusion() {
+    public boolean useAmbientOcclusion() {
         return true;
     }
 
@@ -147,12 +147,12 @@ public class FancyBakedModel implements IDynamicBakedModel {
     }
 
     @Override
-    public boolean isBuiltInRenderer() {
+    public boolean isCustomRenderer() {
         return false;
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture() {
+    public TextureAtlasSprite getParticleIcon() {
         return getTexture();
     }
 
@@ -162,7 +162,7 @@ public class FancyBakedModel implements IDynamicBakedModel {
     }
 
     @Override
-    public ItemCameraTransforms getItemCameraTransforms() {
-        return ItemCameraTransforms.DEFAULT;
+    public ItemCameraTransforms getTransforms() {
+        return ItemCameraTransforms.NO_TRANSFORMS;
     }
 }

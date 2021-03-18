@@ -23,7 +23,7 @@ public class PacketSpawn {
 
     public PacketSpawn(PacketBuffer buf) {
         id = buf.readResourceLocation();
-        type = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, buf.readResourceLocation());
+        type = RegistryKey.create(Registry.DIMENSION_REGISTRY, buf.readResourceLocation());
         pos = buf.readBlockPos();
     }
 
@@ -35,13 +35,13 @@ public class PacketSpawn {
 
     public void toBytes(PacketBuffer buf) {
         buf.writeResourceLocation(id);
-        buf.writeResourceLocation(type.getLocation());
+        buf.writeResourceLocation(type.location());
         buf.writeBlockPos(pos);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerWorld spawnWorld = ctx.get().getSender().world.getServer().getWorld(type);
+            ServerWorld spawnWorld = ctx.get().getSender().level.getServer().getLevel(type);
             EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(id);
             if (entityType == null) {
                 throw new IllegalStateException("This cannot happen! Unknown id '" + id.toString() + "'!");

@@ -16,25 +16,25 @@ public class AfterLivingRenderer {
     public static void render(RenderLivingEvent.Post event) {
         ClientPlayerEntity player = Minecraft.getInstance().player;
 
-        if (player.getHeldItemMainhand().getItem() == Items.GHAST_TEAR) {
+        if (player.getMainHandItem().getItem() == Items.GHAST_TEAR) {
             showMobs(event.getMatrixStack(), event.getBuffers(), event.getEntity());
         }
     }
 
     private static void greenLine(IVertexBuilder builder, Matrix4f positionMatrix, float dx1, float dy1, float dz1, float dx2, float dy2, float dz2) {
-        builder.pos(positionMatrix, dx1, dy1, dz1)
+        builder.vertex(positionMatrix, dx1, dy1, dz1)
                 .color(0.0f, 1.0f, 0.0f, 1.0f)
                 .endVertex();
-        builder.pos(positionMatrix, dx2, dy2, dz2)
+        builder.vertex(positionMatrix, dx2, dy2, dz2)
                 .color(0.0f, 1.0f, 0.0f, 1.0f)
                 .endVertex();
     }
 
     private static void redLine(IVertexBuilder builder, Matrix4f positionMatrix, float dx1, float dy1, float dz1, float dx2, float dy2, float dz2) {
-        builder.pos(positionMatrix, dx1, dy1, dz1)
+        builder.vertex(positionMatrix, dx1, dy1, dz1)
                 .color(1.0f, 0.0f, 0.0f, 1.0f)
                 .endVertex();
-        builder.pos(positionMatrix, dx2, dy2, dz2)
+        builder.vertex(positionMatrix, dx2, dy2, dz2)
                 .color(1.0f, 0.0f, 0.0f, 1.0f)
                 .endVertex();
     }
@@ -43,7 +43,7 @@ public class AfterLivingRenderer {
     private static void showMobs(MatrixStack matrixStack, IRenderTypeBuffer buffer, LivingEntity entity) {
         IVertexBuilder builder = buffer.getBuffer(MyRenderType.OVERLAY_LINES);
 
-        Matrix4f positionMatrix = matrixStack.getLast().getMatrix();
+        Matrix4f positionMatrix = matrixStack.last().pose();
 
         if (entity instanceof IMob) {
             redLine(builder, positionMatrix, 0, .5f, 0, 0, 6, 0);

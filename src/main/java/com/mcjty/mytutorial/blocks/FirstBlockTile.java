@@ -41,15 +41,15 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
-    public void remove() {
-        super.remove();
+    public void setRemoved() {
+        super.setRemoved();
         handler.invalidate();
         energy.invalidate();
     }
 
     @Override
     public void tick() {
-        if (world.isRemote) {
+        if (level.isClientSide) {
             return;
         }
 
@@ -58,7 +58,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
             if (counter <= 0) {
                 energyStorage.addEnergy(Config.FIRSTBLOCK_GENERATE.get());
             }
-            markDirty();
+            setChanged();
         }
 
         if (counter <= 0) {
@@ -66,13 +66,13 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
             if (stack.getItem() == Items.DIAMOND) {
                 itemHandler.extractItem(0, 1, false);
                 counter = Config.FIRSTBLOCK_TICKS.get();
-                markDirty();
+                setChanged();
             }
         }
 
-        BlockState blockState = world.getBlockState(pos);
-        if (blockState.get(BlockStateProperties.POWERED) != counter > 0) {
-            world.setBlockState(pos, blockState.with(BlockStateProperties.POWERED, counter > 0),
+        BlockState blockState = level.getBlockState(worldPosition);
+        if (blockState.getValue(BlockStateProperties.POWERED) != counter > 0) {
+            level.setBlock(worldPosition, blockState.setValue(BlockStateProperties.POWERED, counter > 0),
                     Constants.BlockFlags.NOTIFY_NEIGHBORS + Constants.BlockFlags.BLOCK_UPDATE);
         }
 
@@ -83,14 +83,14 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
         AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
         if (capacity.get() > 0) {
             for (Direction direction : Direction.values()) {
-                TileEntity te = world.getTileEntity(pos.offset(direction));
+                TileEntity te = level.getBlockEntity(worldPosition.relative(direction));
                 if (te != null) {
                     boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
                                 if (handler.canReceive()) {
                                     int received = handler.receiveEnergy(Math.min(capacity.get(), Config.FIRSTBLOCK_SEND.get()), false);
                                     capacity.addAndGet(-received);
                                     energyStorage.consumeEnergy(received);
-                                    markDirty();
+                                    setChanged();
                                     return capacity.get() > 0;
                                 } else {
                                     return true;
@@ -106,21 +106,21 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT tag) {
+    public void load(BlockState state, CompoundNBT tag) {
         itemHandler.deserializeNBT(tag.getCompound("inv"));
         energyStorage.deserializeNBT(tag.getCompound("energy"));
 
         counter = tag.getInt("counter");
-        super.read(state, tag);
+        super.load(state, tag);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag) {
+    public CompoundNBT save(CompoundNBT tag) {
         tag.put("inv", itemHandler.serializeNBT());
         tag.put("energy", energyStorage.serializeNBT());
 
         tag.putInt("counter", counter);
-        return super.write(tag);
+        return super.save(tag);
     }
 
     private ItemStackHandler createHandler() {
@@ -130,7 +130,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
             protected void onContentsChanged(int slot) {
                 // To make sure the TE persists when the chunk is saved later we need to
                 // mark it dirty every time the item handler changes
-                markDirty();
+                setChanged();
             }
 
             @Override
@@ -153,7 +153,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
         return new CustomEnergyStorage(Config.FIRSTBLOCK_MAXPOWER.get(), 0) {
             @Override
             protected void onEnergyChanged() {
-                markDirty();
+                setChanged();
             }
         };
     }

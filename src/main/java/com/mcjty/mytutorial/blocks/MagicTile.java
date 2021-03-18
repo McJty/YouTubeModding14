@@ -12,6 +12,6 @@ public class MagicTile extends TileEntity {
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return new AxisAlignedBB(getPos(), getPos().add(1, 3, 1));
+        return new AxisAlignedBB(getBlockPos(), getBlockPos().offset(1, 3, 1));
     }
 }

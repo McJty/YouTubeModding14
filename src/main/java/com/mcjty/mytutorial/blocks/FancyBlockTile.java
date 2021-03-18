@@ -30,8 +30,8 @@ public class FancyBlockTile extends TileEntity {
 
     public void setMimic(BlockState mimic) {
         this.mimic = mimic;
-        markDirty();
-        world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+        setChanged();
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
     }
 
     public BlockState getMimic() {
@@ -53,7 +53,7 @@ public class FancyBlockTile extends TileEntity {
         // This is actually the default but placed here so you
         // know this is the place to potentially have a lighter read() that only
         // considers things needed client-side
-        read(state, tag);
+        load(state, tag);
     }
 
     // The getUpdatePacket()/onDataPacket() pair is used when a block update happens on the client
@@ -63,17 +63,17 @@ public class FancyBlockTile extends TileEntity {
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         BlockState oldMimic = mimic;
-        CompoundNBT tag = pkt.getNbtCompound();
+        CompoundNBT tag = pkt.getTag();
         handleUpdateTag(getBlockState(), tag);
         if (!Objects.equals(oldMimic, mimic)) {
             ModelDataManager.requestModelDataRefresh(this);
-            world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
         }
     }
 
@@ -86,8 +86,8 @@ public class FancyBlockTile extends TileEntity {
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT tag) {
-        super.read(state, tag);
+    public void load(BlockState state, CompoundNBT tag) {
+        super.load(state, tag);
         readMimic(tag);
     }
 
@@ -98,9 +98,9 @@ public class FancyBlockTile extends TileEntity {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag) {
+    public CompoundNBT save(CompoundNBT tag) {
         writeMimic(tag);
-        return super.write(tag);
+        return super.save(tag);
     }
 
     private void writeMimic(CompoundNBT tag) {

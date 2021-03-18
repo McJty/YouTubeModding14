@@ -22,6 +22,6 @@ public class FancyModelGeometry implements IModelGeometry<FancyModelGeometry> {
 
     @Override
     public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-        return Collections.singletonList(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, FancyBakedModel.TEXTURE));
+        return Collections.singletonList(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, FancyBakedModel.TEXTURE));
     }
 }

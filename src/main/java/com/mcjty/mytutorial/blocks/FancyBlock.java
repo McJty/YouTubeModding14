@@ -24,26 +24,28 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class FancyBlock extends Block {
 
-    private static final VoxelShape SHAPE = VoxelShapes.create(.2, .2, .2, .8, .8, .8);
+    private static final VoxelShape SHAPE = VoxelShapes.box(.2, .2, .2, .8, .8, .8);
 
     public FancyBlock() {
-        super(Properties.create(Material.IRON)
+        super(Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
-                .hardnessAndResistance(2.0f)
+                .strength(2.0f)
         );
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader reader, List<ITextComponent> list, ITooltipFlag flags) {
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader reader, List<ITextComponent> list, ITooltipFlag flags) {
         list.add(new TranslationTextComponent("message.fancyblock"));
     }
 
 
     @Override
     public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FancyBlockTile) {
             BlockState mimic = ((FancyBlockTile) te).getMimic();
             if (mimic != null) {
@@ -55,7 +57,7 @@ public class FancyBlock extends Block {
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-        TileEntity te = reader.getTileEntity(pos);
+        TileEntity te = reader.getBlockEntity(pos);
         if (te instanceof FancyBlockTile) {
             BlockState mimic = ((FancyBlockTile) te).getMimic();
             if (mimic != null) {
@@ -77,18 +79,18 @@ public class FancyBlock extends Block {
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-        ItemStack item = player.getHeldItem(hand);
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+        ItemStack item = player.getItemInHand(hand);
         if (!item.isEmpty() && item.getItem() instanceof BlockItem) {
-            if (!world.isRemote) {
-                TileEntity te = world.getTileEntity(pos);
+            if (!world.isClientSide) {
+                TileEntity te = world.getBlockEntity(pos);
                 if (te instanceof FancyBlockTile) {
-                    BlockState mimicState = ((BlockItem) item.getItem()).getBlock().getDefaultState();
+                    BlockState mimicState = ((BlockItem) item.getItem()).getBlock().defaultBlockState();
                     ((FancyBlockTile) te).setMimic(mimicState);
                 }
             }
             return ActionResultType.SUCCESS;
         }
-        return super.onBlockActivated(state, world, pos, player, hand, trace);
+        return super.use(state, world, pos, player, hand, trace);
     }
 }

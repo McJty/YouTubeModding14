@@ -23,29 +23,29 @@ public class WeirdMobEggItem extends Item {
 
     public WeirdMobEggItem() {
         super(new Item.Properties()
-                .maxStackSize(1)
-                .group(ModSetup.ITEM_GROUP));
+                .stacksTo(1)
+                .tab(ModSetup.ITEM_GROUP));
     }
 
     /**
      * Called when this item is used when targetting a Block
      */
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        World world = context.getWorld();
-        if (world.isRemote) {
+    public ActionResultType useOn(ItemUseContext context) {
+        World world = context.getLevel();
+        if (world.isClientSide) {
             return ActionResultType.SUCCESS;
         } else {
-            ItemStack itemstack = context.getItem();
-            BlockPos blockpos = context.getPos();
-            Direction direction = context.getFace();
+            ItemStack itemstack = context.getItemInHand();
+            BlockPos blockpos = context.getClickedPos();
+            Direction direction = context.getClickedFace();
             BlockState blockstate = world.getBlockState(blockpos);
-            TileEntity tileentity = world.getTileEntity(blockpos);
+            TileEntity tileentity = world.getBlockEntity(blockpos);
             if (tileentity instanceof MobSpawnerTileEntity) {
-                AbstractSpawner abstractspawner = ((MobSpawnerTileEntity) tileentity).getSpawnerBaseLogic();
-                abstractspawner.setEntityType(Registration.WEIRDMOB.get());
-                tileentity.markDirty();
-                world.notifyBlockUpdate(blockpos, blockstate, blockstate, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                AbstractSpawner abstractspawner = ((MobSpawnerTileEntity) tileentity).getSpawner();
+                abstractspawner.setEntityId(Registration.WEIRDMOB.get());
+                tileentity.setChanged();
+                world.sendBlockUpdated(blockpos, blockstate, blockstate, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
                 itemstack.shrink(1);
                 return ActionResultType.SUCCESS;
             }
@@ -54,7 +54,7 @@ public class WeirdMobEggItem extends Item {
             if (blockstate.getCollisionShape(world, blockpos).isEmpty()) {
                 blockpos1 = blockpos;
             } else {
-                blockpos1 = blockpos.offset(direction);
+                blockpos1 = blockpos.relative(direction);
             }
 
             if (Registration.WEIRDMOB.get().spawn((ServerWorld) world, itemstack, context.getPlayer(), blockpos1, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP) != null) {

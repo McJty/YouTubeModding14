@@ -44,15 +44,15 @@ public class ComplexMultipartTile extends TileEntity {
         Mode east = getMode(Direction.EAST);
         Mode up = getMode(Direction.UP);
         Mode down = getMode(Direction.DOWN);
-        BlockState state = world.getBlockState(pos);
-        world.setBlockState(pos, state.with(NORTH, north).with(SOUTH, south).with(WEST, west).with(EAST, east).with(UP, up).with(DOWN, down),
+        BlockState state = level.getBlockState(worldPosition);
+        level.setBlock(worldPosition, state.setValue(NORTH, north).setValue(SOUTH, south).setValue(WEST, west).setValue(EAST, east).setValue(UP, up).setValue(DOWN, down),
                 Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
-        super.read(state, compound);
+    public void load(BlockState state, CompoundNBT compound) {
+        super.load(state, compound);
         modes[0] = Mode.values()[compound.getByte("m0")];
         modes[1] = Mode.values()[compound.getByte("m1")];
         modes[2] = Mode.values()[compound.getByte("m2")];
@@ -62,14 +62,14 @@ public class ComplexMultipartTile extends TileEntity {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundNBT save(CompoundNBT compound) {
         compound.putByte("m0", (byte) modes[0].ordinal());
         compound.putByte("m1", (byte) modes[1].ordinal());
         compound.putByte("m2", (byte) modes[2].ordinal());
         compound.putByte("m3", (byte) modes[3].ordinal());
         compound.putByte("m4", (byte) modes[4].ordinal());
         compound.putByte("m5", (byte) modes[5].ordinal());
-        return super.write(compound);
+        return super.save(compound);
     }
 
 
@@ -85,14 +85,14 @@ public class ComplexMultipartTile extends TileEntity {
         }
 
         @Override
-        public String getString() {
+        public String getSerializedName() {
             return name;
         }
 
 
         @Override
         public String toString() {
-            return getString();
+            return getSerializedName();
         }
     }
 }

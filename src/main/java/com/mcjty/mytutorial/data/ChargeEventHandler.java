@@ -30,7 +30,7 @@ public class ChargeEventHandler {
         entity.getCapability(CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY).ifPresent(h -> {
             int charge = h.getCharge();
             if (charge > 0) {
-                entity.getEntityWorld().createExplosion(entity, entity.getPosX(), entity.getPosY(), entity.getPosZ(), charge * .3f + 1.0f, Explosion.Mode.DESTROY);
+                entity.getCommandSenderWorld().explode(entity, entity.getX(), entity.getY(), entity.getZ(), charge * .3f + 1.0f, Explosion.Mode.DESTROY);
             }
         });
     }
@@ -39,17 +39,17 @@ public class ChargeEventHandler {
         Entity attacker = event.getEntity();
         if (attacker instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) attacker;
-            ItemStack stack = player.getHeldItemMainhand();
+            ItemStack stack = player.getMainHandItem();
             if (stack.getItem() == Items.GUNPOWDER) {
                 Entity target = event.getTarget();
                 target.getCapability(CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY).ifPresent(h -> {
                     int charge = h.getCharge() + 1;
                     h.setCharge(charge);
-                    player.sendStatusMessage(new TranslationTextComponent("message.increase_charge", Integer.toString(charge)), true);
+                    player.displayClientMessage(new TranslationTextComponent("message.increase_charge", Integer.toString(charge)), true);
                     stack.shrink(1);
-                    player.setHeldItem(Hand.MAIN_HAND, stack);
+                    player.setItemInHand(Hand.MAIN_HAND, stack);
                     event.setCanceled(true);
-                    target.getEntityWorld().addParticle(ParticleTypes.FIREWORK, target.getPosX(), target.getPosY()+1, target.getPosZ(), 0.0, 0.0, 0.0);
+                    target.getCommandSenderWorld().addParticle(ParticleTypes.FIREWORK, target.getX(), target.getY()+1, target.getZ(), 0.0, 0.0, 0.0);
                 });
             }
         }

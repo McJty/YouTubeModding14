@@ -15,12 +15,12 @@ public class WeirdMobModel extends EntityModel<WeirdMobEntity> {
     }
 
     @Override
-    public void setRotationAngles(WeirdMobEntity weirdMobEntity, float v, float v1, float v2, float v3, float v4) {
+    public void setupAnim(WeirdMobEntity weirdMobEntity, float v, float v1, float v2, float v3, float v4) {
 
     }
 
     @Override
-    public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         body.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 }

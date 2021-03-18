@@ -33,7 +33,7 @@ public class BlockStates extends BlockStateProvider {
         BlockModelBuilder modelFirstblock = models().cube("firstblock", txt, txt, new ResourceLocation(MyTutorial.MODID, "block/firstblock_front"), txt, txt, txt);
         BlockModelBuilder modelFirstblockPowered = models().cube("firstblock_powered", txt, txt, new ResourceLocation(MyTutorial.MODID, "block/firstblock_powered"), txt, txt, txt);
         orientedBlock(Registration.FIRSTBLOCK.get(), state -> {
-            if (state.get(BlockStateProperties.POWERED)) {
+            if (state.getValue(BlockStateProperties.POWERED)) {
                 return modelFirstblockPowered;
             } else {
                 return modelFirstblock;
@@ -101,11 +101,11 @@ public class BlockStates extends BlockStateProvider {
     private void orientedBlock(Block block, Function<BlockState, ModelFile> modelFunc) {
         getVariantBuilder(block)
                 .forAllStates(state -> {
-                    Direction dir = state.get(BlockStateProperties.FACING);
+                    Direction dir = state.getValue(BlockStateProperties.FACING);
                     return ConfiguredModel.builder()
                             .modelFile(modelFunc.apply(state))
-                            .rotationX(dir.getAxis() == Direction.Axis.Y ?  dir.getAxisDirection().getOffset() * -90 : 0)
-                            .rotationY(dir.getAxis() != Direction.Axis.Y ? ((dir.getHorizontalIndex() + 2) % 4) * 90 : 0)
+                            .rotationX(dir.getAxis() == Direction.Axis.Y ?  dir.getAxisDirection().getStep() * -90 : 0)
+                            .rotationY(dir.getAxis() != Direction.Axis.Y ? ((dir.get2DDataValue() + 2) % 4) * 90 : 0)
                             .build();
                 });
     }

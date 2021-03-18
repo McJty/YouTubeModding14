@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class TutorialBiomeProvider extends BiomeProvider {
 
-    public static final Codec<TutorialBiomeProvider> CODEC = RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
+    public static final Codec<TutorialBiomeProvider> CODEC = RegistryLookupCodec.create(Registry.BIOME_REGISTRY)
             .xmap(TutorialBiomeProvider::new, TutorialBiomeProvider::getBiomeRegistry).codec();
 
     private final Biome biome;
@@ -25,11 +25,11 @@ public class TutorialBiomeProvider extends BiomeProvider {
     public TutorialBiomeProvider(Registry<Biome> biomeRegistry) {
         super(getStartBiomes(biomeRegistry));
         this.biomeRegistry = biomeRegistry;
-        biome = biomeRegistry.getOrDefault(Biomes.PLAINS.getLocation());
+        biome = biomeRegistry.get(Biomes.PLAINS.location());
     }
 
     private static List<Biome> getStartBiomes(Registry<Biome> registry) {
-        return SPAWN.stream().map(s -> registry.getOrDefault(s.getLocation())).collect(Collectors.toList());
+        return SPAWN.stream().map(s -> registry.get(s.location())).collect(Collectors.toList());
     }
 
     public Registry<Biome> getBiomeRegistry() {
@@ -37,17 +37,17 @@ public class TutorialBiomeProvider extends BiomeProvider {
     }
 
     @Override
-    public boolean hasStructure(Structure<?> structure) {
+    public boolean canGenerateStructure(Structure<?> structure) {
         return false;
     }
 
     @Override
-    protected Codec<? extends BiomeProvider> getBiomeProviderCodec() {
+    protected Codec<? extends BiomeProvider> codec() {
         return CODEC;
     }
 
     @Override
-    public BiomeProvider getBiomeProvider(long seed) {
+    public BiomeProvider withSeed(long seed) {
         return this;
     }
 

@@ -20,20 +20,20 @@ public class CommandTpDim implements Command<CommandSource> {
 
     public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
         return Commands.literal("dim")
-                .requires(cs -> cs.hasPermissionLevel(0))
+                .requires(cs -> cs.hasPermission(0))
                 .executes(CMD);
     }
 
     @Override
     public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity player = context.getSource().asPlayer();
-        int x = player.getPosition().getX();
-        int z = player.getPosition().getZ();
-        if (player.getEntityWorld().getDimensionKey().equals(ModDimensions.TUTDIM)) {
-            ServerWorld world = player.getServer().getWorld(World.OVERWORLD);
+        ServerPlayerEntity player = context.getSource().getPlayerOrException();
+        int x = player.blockPosition().getX();
+        int z = player.blockPosition().getZ();
+        if (player.getCommandSenderWorld().dimension().equals(ModDimensions.TUTDIM)) {
+            ServerWorld world = player.getServer().getLevel(World.OVERWORLD);
             TeleportationTools.teleport(player, world, new BlockPos(x, 200, z));
         } else {
-            ServerWorld world = player.getServer().getWorld(ModDimensions.TUTDIM);
+            ServerWorld world = player.getServer().getLevel(ModDimensions.TUTDIM);
             TeleportationTools.teleport(player, world, new BlockPos(x, 200, z));
         }
         return 0;

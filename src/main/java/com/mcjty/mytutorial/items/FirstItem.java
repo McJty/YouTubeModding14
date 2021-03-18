@@ -16,12 +16,12 @@ public class FirstItem extends Item {
 
     public FirstItem() {
         super(new Item.Properties()
-                .maxStackSize(1)
-                .group(ModSetup.ITEM_GROUP));
+                .stacksTo(1)
+                .tab(ModSetup.ITEM_GROUP));
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flags) {
+    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flags) {
         list.add(new TranslationTextComponent("message.firstitem"));
     }
 

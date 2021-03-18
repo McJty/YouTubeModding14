@@ -18,15 +18,15 @@ public class Recipes extends RecipeProvider {
     }
 
     @Override
-    protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
-        ShapedRecipeBuilder.shapedRecipe(Registration.FIRSTBLOCK.get())
-                .patternLine("xxx")
-                .patternLine("x#x")
-                .patternLine("xxx")
-                .key('x', Tags.Items.COBBLESTONE)
-                .key('#', Tags.Items.DYES_RED)
-                .setGroup("mytutorial")
-                .addCriterion("cobblestone", InventoryChangeTrigger.Instance.forItems(Blocks.COBBLESTONE))
-                .build(consumer);
+    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+        ShapedRecipeBuilder.shaped(Registration.FIRSTBLOCK.get())
+                .pattern("xxx")
+                .pattern("x#x")
+                .pattern("xxx")
+                .define('x', Tags.Items.COBBLESTONE)
+                .define('#', Tags.Items.DYES_RED)
+                .group("mytutorial")
+                .unlockedBy("cobblestone", InventoryChangeTrigger.Instance.hasItems(Blocks.COBBLESTONE))
+                .save(consumer);
     }
 }

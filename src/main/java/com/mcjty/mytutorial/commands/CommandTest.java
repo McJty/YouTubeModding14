@@ -15,13 +15,13 @@ public class CommandTest implements Command<CommandSource> {
 
     public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
         return Commands.literal("test")
-                .requires(cs -> cs.hasPermissionLevel(0))
+                .requires(cs -> cs.hasPermission(0))
                 .executes(CMD);
     }
 
     @Override
     public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        context.getSource().sendFeedback(new TranslationTextComponent("message.mytutorial.command.test"), false);
+        context.getSource().sendSuccess(new TranslationTextComponent("message.mytutorial.command.test"), false);
         return 0;
     }
 }

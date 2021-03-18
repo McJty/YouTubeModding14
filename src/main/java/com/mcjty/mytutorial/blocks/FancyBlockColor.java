@@ -14,7 +14,7 @@ public class FancyBlockColor implements IBlockColor {
     @Override
     public int getColor(BlockState state, @Nullable IBlockDisplayReader world, @Nullable BlockPos pos, int tint) {
         if (world != null) {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof FancyBlockTile) {
                 FancyBlockTile fancy = (FancyBlockTile) te;
                 BlockState mimic = fancy.getMimic();

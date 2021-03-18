@@ -17,7 +17,7 @@ public class WeirdMobRenderer extends MobRenderer<WeirdMobEntity, WeirdMobModel>
 
     @Nullable
     @Override
-    public ResourceLocation getEntityTexture(WeirdMobEntity entity) {
+    public ResourceLocation getTextureLocation(WeirdMobEntity entity) {
         return TEXTURE;
     }
 }

@@ -15,7 +15,7 @@ public class TeleportationTools {
             @Override
             public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
                 entity = repositionEntity.apply(false);
-                entity.setPositionAndUpdate(pos.getX(), pos.getY(), pos.getZ());
+                entity.teleportTo(pos.getX(), pos.getY(), pos.getZ());
                 return entity;
             }
         });

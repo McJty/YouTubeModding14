@@ -1,14 +1,14 @@
 package com.mcjty.mytutorial.dimension;
 
 import com.mcjty.mytutorial.MyTutorial;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.Level;
 
 public class ModDimensions {
 
-    public static final RegistryKey<DimensionType> TUTDIM_TYPE = RegistryKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation(MyTutorial.MODID, "tutdim"));
-    public static final RegistryKey<World> TUTDIM = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(MyTutorial.MODID, "tutdim"));
+    public static final ResourceKey<DimensionType> TUTDIM_TYPE = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation(MyTutorial.MODID, "tutdim"));
+    public static final ResourceKey<Level> TUTDIM = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(MyTutorial.MODID, "tutdim"));
 }

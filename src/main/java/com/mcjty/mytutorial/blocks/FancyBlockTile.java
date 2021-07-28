@@ -1,11 +1,12 @@
 package com.mcjty.mytutorial.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
@@ -18,14 +19,14 @@ import java.util.Objects;
 
 import static com.mcjty.mytutorial.setup.Registration.FANCYBLOCK_TILE;
 
-public class FancyBlockTile extends TileEntity {
+public class FancyBlockTile extends BlockEntity {
 
     public static final ModelProperty<BlockState> MIMIC = new ModelProperty<>();
 
     private BlockState mimic;
 
-    public FancyBlockTile() {
-        super(FANCYBLOCK_TILE.get());
+    public FancyBlockTile(BlockPos pos, BlockState state) {
+        super(FANCYBLOCK_TILE.get(), pos, state);
     }
 
     public void setMimic(BlockState mimic) {
@@ -42,18 +43,18 @@ public class FancyBlockTile extends TileEntity {
     // it hasn't seen before. i.e. the chunk is loaded
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT tag = super.getUpdateTag();
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = super.getUpdateTag();
         writeMimic(tag);
         return tag;
     }
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(CompoundTag tag) {
         // This is actually the default but placed here so you
         // know this is the place to potentially have a lighter read() that only
         // considers things needed client-side
-        load(state, tag);
+        load(tag);
     }
 
     // The getUpdatePacket()/onDataPacket() pair is used when a block update happens on the client
@@ -62,15 +63,15 @@ public class FancyBlockTile extends TileEntity {
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         BlockState oldMimic = mimic;
-        CompoundNBT tag = pkt.getTag();
-        handleUpdateTag(getBlockState(), tag);
+        CompoundTag tag = pkt.getTag();
+        handleUpdateTag(tag);
         if (!Objects.equals(oldMimic, mimic)) {
             ModelDataManager.requestModelDataRefresh(this);
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
@@ -86,26 +87,26 @@ public class FancyBlockTile extends TileEntity {
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag) {
-        super.load(state, tag);
+    public void load(CompoundTag tag) {
+        super.load(tag);
         readMimic(tag);
     }
 
-    private void readMimic(CompoundNBT tag) {
+    private void readMimic(CompoundTag tag) {
         if (tag.contains("mimic")) {
-            mimic = NBTUtil.readBlockState(tag.getCompound("mimic"));
+            mimic = NbtUtils.readBlockState(tag.getCompound("mimic"));
         }
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
+    public CompoundTag save(CompoundTag tag) {
         writeMimic(tag);
         return super.save(tag);
     }
 
-    private void writeMimic(CompoundNBT tag) {
+    private void writeMimic(CompoundTag tag) {
         if (mimic != null) {
-            tag.put("mimic", NBTUtil.writeBlockState(mimic));
+            tag.put("mimic", NbtUtils.writeBlockState(mimic));
         }
     }
 }

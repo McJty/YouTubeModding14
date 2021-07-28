@@ -9,21 +9,17 @@ import com.mcjty.mytutorial.client.AfterLivingRenderer;
 import com.mcjty.mytutorial.client.InWorldRenderer;
 import com.mcjty.mytutorial.entities.WeirdMobRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -33,17 +29,21 @@ import static com.mcjty.mytutorial.blocks.MagicRenderer.MAGICBLOCK_TEXTURE;
 public class ClientSetup {
 
     public static void init(final FMLClientSetupEvent event) {
-        ScreenManager.register(Registration.FIRSTBLOCK_CONTAINER.get(), FirstBlockScreen::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.WEIRDMOB.get(), WeirdMobRenderer::new);
-        MagicRenderer.register();
+        MenuScreens.register(Registration.FIRSTBLOCK_CONTAINER.get(), FirstBlockScreen::new);
         MinecraftForge.EVENT_BUS.addListener(InWorldRenderer::render);
         MinecraftForge.EVENT_BUS.addListener(AfterLivingRenderer::render);
 
         event.enqueueWork(() -> {
-            RenderTypeLookup.setRenderLayer(Registration.COMPLEX_MULTIPART.get(), RenderType.translucent());
-            RenderTypeLookup.setRenderLayer(Registration.FANCYBLOCK.get(), (RenderType) -> true);
+            MagicRenderer.register();
+            ItemBlockRenderTypes.setRenderLayer(Registration.COMPLEX_MULTIPART.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.FANCYBLOCK.get(), (RenderType) -> true);
             Minecraft.getInstance().getBlockColors().register(new FancyBlockColor(), Registration.FANCYBLOCK.get());
         });
+    }
+
+    @SubscribeEvent
+    public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(Registration.WEIRDMOB.get(), WeirdMobRenderer::new);
     }
 
     @SubscribeEvent
@@ -58,7 +58,7 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) {
+        if (!event.getMap().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
             return;
         }
 

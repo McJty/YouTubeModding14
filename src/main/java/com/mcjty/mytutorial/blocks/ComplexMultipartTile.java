@@ -1,21 +1,22 @@
 package com.mcjty.mytutorial.blocks;
 
 import com.mcjty.mytutorial.setup.Registration;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.Constants;
 
 import static com.mcjty.mytutorial.blocks.ComplexMultipartBlock.*;
 
-public class ComplexMultipartTile extends TileEntity {
+public class ComplexMultipartTile extends BlockEntity {
 
     private Mode modes[] = new Mode[]{Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE, Mode.MODE_NONE};
 
-    public ComplexMultipartTile() {
-        super(Registration.COMPLEX_MULTIPART_TILE.get());
+    public ComplexMultipartTile(BlockPos pos, BlockState state) {
+        super(Registration.COMPLEX_MULTIPART_TILE.get(), pos, state);
     }
 
     public void toggleMode(Direction side) {
@@ -51,8 +52,8 @@ public class ComplexMultipartTile extends TileEntity {
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound) {
-        super.load(state, compound);
+    public void load(CompoundTag compound) {
+        super.load(compound);
         modes[0] = Mode.values()[compound.getByte("m0")];
         modes[1] = Mode.values()[compound.getByte("m1")];
         modes[2] = Mode.values()[compound.getByte("m2")];
@@ -62,7 +63,7 @@ public class ComplexMultipartTile extends TileEntity {
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         compound.putByte("m0", (byte) modes[0].ordinal());
         compound.putByte("m1", (byte) modes[1].ordinal());
         compound.putByte("m2", (byte) modes[2].ordinal());
@@ -73,7 +74,7 @@ public class ComplexMultipartTile extends TileEntity {
     }
 
 
-    public enum Mode implements IStringSerializable {
+    public enum Mode implements StringRepresentable {
         MODE_NONE("none"),
         MODE_INPUT("input"),   // Blue
         MODE_OUTPUT("output"); // Yellow

@@ -2,14 +2,14 @@ package com.mcjty.mytutorial.blocks;
 
 import com.mcjty.mytutorial.setup.Config;
 import com.mcjty.mytutorial.tools.CustomEnergyStorage;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.mcjty.mytutorial.setup.Registration.FIRSTBLOCK_TILE;
 
-public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
+public class FirstBlockTile extends BlockEntity {
 
     private ItemStackHandler itemHandler = createHandler();
     private CustomEnergyStorage energyStorage = createEnergy();
@@ -36,8 +36,8 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
 
     private int counter;
 
-    public FirstBlockTile() {
-        super(FIRSTBLOCK_TILE.get());
+    public FirstBlockTile(BlockPos pos, BlockState state) {
+        super(FIRSTBLOCK_TILE.get(), pos, state);
     }
 
     @Override
@@ -47,12 +47,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
         energy.invalidate();
     }
 
-    @Override
-    public void tick() {
-        if (level.isClientSide) {
-            return;
-        }
-
+    public void tickServer() {
         if (counter > 0) {
             counter--;
             if (counter <= 0) {
@@ -83,7 +78,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
         AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
         if (capacity.get() > 0) {
             for (Direction direction : Direction.values()) {
-                TileEntity te = level.getBlockEntity(worldPosition.relative(direction));
+                BlockEntity te = level.getBlockEntity(worldPosition.relative(direction));
                 if (te != null) {
                     boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
                                 if (handler.canReceive()) {
@@ -106,16 +101,16 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag) {
+    public void load(CompoundTag tag) {
         itemHandler.deserializeNBT(tag.getCompound("inv"));
         energyStorage.deserializeNBT(tag.getCompound("energy"));
 
         counter = tag.getInt("counter");
-        super.load(state, tag);
+        super.load(tag);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
+    public CompoundTag save(CompoundTag tag) {
         tag.put("inv", itemHandler.serializeNBT());
         tag.put("energy", energyStorage.serializeNBT());
 

@@ -1,10 +1,9 @@
 package com.mcjty.mytutorial.network;
 
 import com.mcjty.mytutorial.gui.SpawnerScreen;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
-
 
 public class PacketOpenGui {
 

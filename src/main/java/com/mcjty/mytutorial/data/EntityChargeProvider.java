@@ -1,7 +1,7 @@
 package com.mcjty.mytutorial.data;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -9,7 +9,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class EntityChargeProvider implements ICapabilitySerializable<CompoundNBT> {
+public class EntityChargeProvider implements ICapabilitySerializable<CompoundTag> {
 
     private final DefaultEntityCharge charge = new DefaultEntityCharge();
     private final LazyOptional<IEntityCharge> chargeOptional = LazyOptional.of(() -> charge);
@@ -25,18 +25,21 @@ public class EntityChargeProvider implements ICapabilitySerializable<CompoundNBT
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
         if (CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY == null) {
-            return new CompoundNBT();
+            return new CompoundTag();
         } else {
-            return (CompoundNBT) CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY.writeNBT(charge, null);
+            // @todo
+//            return (CompoundTag) CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY.writeNBT(charge, null);
+            return new CompoundTag();
         }
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         if (CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY != null) {
-            CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY.readNBT(charge, null, nbt);
+            // @todo
+//            CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY.readNBT(charge, null, nbt);
         }
     }
 }

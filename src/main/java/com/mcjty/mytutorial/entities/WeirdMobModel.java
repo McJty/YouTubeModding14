@@ -1,17 +1,18 @@
 package com.mcjty.mytutorial.entities;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
 
 public class WeirdMobModel extends EntityModel<WeirdMobEntity> {
 
-    public ModelRenderer body;
+    public ModelPart body;
 
     public WeirdMobModel() {
-        body = new ModelRenderer(this, 0, 0);
-        body.addBox(-3, 14, -3, 6, 6, 6);
+//        List<ModelPart.Cube> cubes = Collections.singletonList(new ModelPart.Cube(-3, 14, -3, 6, 6, 6))
+//        body = new ModelPart(this, 0, 0);
+//        body.addBox(-3, 14, -3, 6, 6, 6);
     }
 
     @Override
@@ -20,7 +21,7 @@ public class WeirdMobModel extends EntityModel<WeirdMobEntity> {
     }
 
     @Override
-    public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack matrixStack, VertexConsumer iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         body.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 }

@@ -3,7 +3,7 @@ package com.mcjty.mytutorial.datagen;
 import com.mcjty.mytutorial.MyTutorial;
 import com.mcjty.mytutorial.setup.Registration;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 

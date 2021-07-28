@@ -1,29 +1,29 @@
 package com.mcjty.mytutorial.entities;
 
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
-public class WeirdMobEntity extends AnimalEntity {
+public class WeirdMobEntity extends Animal {
 
-    public WeirdMobEntity(EntityType<? extends AnimalEntity> type, World worldIn) {
+    public WeirdMobEntity(EntityType<? extends Animal> type, Level worldIn) {
         super(type, worldIn);
     }
 
     @Nullable
     @Override
-    public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
+    public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
         return null;
     }
 
-    public static AttributeModifierMap.MutableAttribute prepareAttributes() {
+    public static AttributeSupplier.Builder prepareAttributes() {
         return LivingEntity.createLivingAttributes()
                 .add(Attributes.ATTACK_DAMAGE, 3.0D)
                 .add(Attributes.MAX_HEALTH, 20.0D)

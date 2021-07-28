@@ -1,26 +1,26 @@
 package com.mcjty.mytutorial.dimension;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryLookupCodec;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryLookupCodec;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TutorialBiomeProvider extends BiomeProvider {
+public class TutorialBiomeProvider extends BiomeSource {
 
     public static final Codec<TutorialBiomeProvider> CODEC = RegistryLookupCodec.create(Registry.BIOME_REGISTRY)
             .xmap(TutorialBiomeProvider::new, TutorialBiomeProvider::getBiomeRegistry).codec();
 
     private final Biome biome;
     private final Registry<Biome> biomeRegistry;
-    private static final List<RegistryKey<Biome>> SPAWN = Collections.singletonList(Biomes.PLAINS);
+    private static final List<ResourceKey<Biome>> SPAWN = Collections.singletonList(Biomes.PLAINS);
 
     public TutorialBiomeProvider(Registry<Biome> biomeRegistry) {
         super(getStartBiomes(biomeRegistry));
@@ -37,17 +37,17 @@ public class TutorialBiomeProvider extends BiomeProvider {
     }
 
     @Override
-    public boolean canGenerateStructure(Structure<?> structure) {
+    public boolean canGenerateStructure(StructureFeature<?> structure) {
         return false;
     }
 
     @Override
-    protected Codec<? extends BiomeProvider> codec() {
+    protected Codec<? extends BiomeSource> codec() {
         return CODEC;
     }
 
     @Override
-    public BiomeProvider withSeed(long seed) {
+    public BiomeSource withSeed(long seed) {
         return this;
     }
 

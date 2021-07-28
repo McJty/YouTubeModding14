@@ -1,27 +1,27 @@
 package com.mcjty.mytutorial.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.item.Items;
+import com.mojang.math.Matrix4f;
 import net.minecraftforge.client.event.RenderLivingEvent;
 
 public class AfterLivingRenderer {
 
     public static void render(RenderLivingEvent.Post event) {
-        ClientPlayerEntity player = Minecraft.getInstance().player;
+        LocalPlayer player = Minecraft.getInstance().player;
 
         if (player.getMainHandItem().getItem() == Items.GHAST_TEAR) {
             showMobs(event.getMatrixStack(), event.getBuffers(), event.getEntity());
         }
     }
 
-    private static void greenLine(IVertexBuilder builder, Matrix4f positionMatrix, float dx1, float dy1, float dz1, float dx2, float dy2, float dz2) {
+    private static void greenLine(VertexConsumer builder, Matrix4f positionMatrix, float dx1, float dy1, float dz1, float dx2, float dy2, float dz2) {
         builder.vertex(positionMatrix, dx1, dy1, dz1)
                 .color(0.0f, 1.0f, 0.0f, 1.0f)
                 .endVertex();
@@ -30,7 +30,7 @@ public class AfterLivingRenderer {
                 .endVertex();
     }
 
-    private static void redLine(IVertexBuilder builder, Matrix4f positionMatrix, float dx1, float dy1, float dz1, float dx2, float dy2, float dz2) {
+    private static void redLine(VertexConsumer builder, Matrix4f positionMatrix, float dx1, float dy1, float dz1, float dx2, float dy2, float dz2) {
         builder.vertex(positionMatrix, dx1, dy1, dz1)
                 .color(1.0f, 0.0f, 0.0f, 1.0f)
                 .endVertex();
@@ -40,12 +40,12 @@ public class AfterLivingRenderer {
     }
 
 
-    private static void showMobs(MatrixStack matrixStack, IRenderTypeBuffer buffer, LivingEntity entity) {
-        IVertexBuilder builder = buffer.getBuffer(MyRenderType.OVERLAY_LINES);
+    private static void showMobs(PoseStack matrixStack, MultiBufferSource buffer, LivingEntity entity) {
+        VertexConsumer builder = buffer.getBuffer(MyRenderType.OVERLAY_LINES);
 
         Matrix4f positionMatrix = matrixStack.last().pose();
 
-        if (entity instanceof IMob) {
+        if (entity instanceof Enemy) {
             redLine(builder, positionMatrix, 0, .5f, 0, 0, 6, 0);
         } else {
             greenLine(builder, positionMatrix, 0, .5f, 0, 0, 6, 0);

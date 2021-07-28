@@ -3,22 +3,21 @@ package com.mcjty.mytutorial.dimension;
 import com.mcjty.mytutorial.MyTutorial;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryLookupCodec;
-import net.minecraft.world.Blockreader;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.WorldGenRegion;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraft.world.gen.settings.DimensionStructuresSettings;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryLookupCodec;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.world.level.levelgen.StructureSettings;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 public class TutorialChunkGenerator extends ChunkGenerator {
 
@@ -38,7 +37,7 @@ public class TutorialChunkGenerator extends ChunkGenerator {
     private final Settings settings;
 
     public TutorialChunkGenerator(Registry<Biome> registry, Settings settings) {
-        super(new TutorialBiomeProvider(registry), new DimensionStructuresSettings(false));
+        super(new TutorialBiomeProvider(registry), new StructureSettings(false));
         this.settings = settings;
         MyTutorial.LOGGER.info("Chunk generator settings: " + settings.getBaseHeight() + ", " + settings.getHorizontalVariance() + ", " + settings.getVerticalVariance());
     }
@@ -52,12 +51,12 @@ public class TutorialChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void buildSurfaceAndBedrock(WorldGenRegion region, IChunk chunk) {
+    public void buildSurfaceAndBedrock(WorldGenRegion region, ChunkAccess chunk) {
         BlockState bedrock = Blocks.BEDROCK.defaultBlockState();
         BlockState stone = Blocks.STONE.defaultBlockState();
         ChunkPos chunkpos = chunk.getPos();
 
-        BlockPos.Mutable pos = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
         int x;
         int z;
@@ -94,18 +93,18 @@ public class TutorialChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void fillFromNoise(IWorld world, StructureManager structureManager, IChunk chunk) {
-
+    public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess) {
+        return CompletableFuture.completedFuture(null);
     }
 
     @Override
-    public int getBaseHeight(int x, int z, Heightmap.Type heightmapType) {
+    public int getBaseHeight(int i, int i1, Heightmap.Types types, LevelHeightAccessor levelHeightAccessor) {
         return 0;
     }
 
     @Override
-    public IBlockReader getBaseColumn(int p_230348_1_, int p_230348_2_) {
-        return new Blockreader(new BlockState[0]);
+    public NoiseColumn getBaseColumn(int i, int i1, LevelHeightAccessor levelHeightAccessor) {
+        return new NoiseColumn(0, new BlockState[0]);
     }
 
     private static class Settings {

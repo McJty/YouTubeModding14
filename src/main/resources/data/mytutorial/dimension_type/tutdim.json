@@ -3,6 +3,8 @@
   "ultrawarm": false,
   "natural": true,
   "coordinate_scale": 0.125,
+  "height": 256,
+  "min_y": 0,
   "shrunk": false,
   "has_skylight": true,
   "has_ceiling": false,

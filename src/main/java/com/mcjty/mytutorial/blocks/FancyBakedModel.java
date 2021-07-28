@@ -2,20 +2,20 @@ package com.mcjty.mytutorial.blocks;
 
 import com.google.common.collect.ImmutableList;
 import com.mcjty.mytutorial.MyTutorial;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
@@ -34,7 +34,7 @@ public class FancyBakedModel implements IDynamicBakedModel {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MyTutorial.MODID, "block/fancyblock");
 
     private TextureAtlasSprite getTexture() {
-        return Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(TEXTURE);
+        return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(TEXTURE);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class FancyBakedModel implements IDynamicBakedModel {
         return false;
     }
 
-    private void putVertex(BakedQuadBuilder builder, Vector3d normal,
+    private void putVertex(BakedQuadBuilder builder, Vec3 normal,
                            double x, double y, double z, float u, float v, TextureAtlasSprite sprite, float r, float g, float b) {
 
         ImmutableList<VertexFormatElement> elements = builder.getVertexFormat().getElements().asList();
@@ -80,8 +80,8 @@ public class FancyBakedModel implements IDynamicBakedModel {
         }
     }
 
-    private BakedQuad createQuad(Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, TextureAtlasSprite sprite) {
-        Vector3d normal = v3.subtract(v2).cross(v1.subtract(v2)).normalize();
+    private BakedQuad createQuad(Vec3 v1, Vec3 v2, Vec3 v3, Vec3 v4, TextureAtlasSprite sprite) {
+        Vec3 normal = v3.subtract(v2).cross(v1.subtract(v2)).normalize();
         int tw = sprite.getWidth();
         int th = sprite.getHeight();
 
@@ -94,8 +94,8 @@ public class FancyBakedModel implements IDynamicBakedModel {
         return builder.build();
     }
 
-    private static Vector3d v(double x, double y, double z) {
-        return new Vector3d(x, y, z);
+    private static Vec3 v(double x, double y, double z) {
+        return new Vec3(x, y, z);
     }
 
 
@@ -107,8 +107,8 @@ public class FancyBakedModel implements IDynamicBakedModel {
 
         BlockState mimic = extraData.getData(FancyBlockTile.MIMIC);
         if (mimic != null && !(mimic.getBlock() instanceof FancyBlock)) {
-            if (layer == null || RenderTypeLookup.canRenderInLayer(mimic, layer)) {
-                IBakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getBlockModel(mimic);
+            if (layer == null || ItemBlockRenderTypes.canRenderInLayer(mimic, layer)) {
+                BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getBlockModel(mimic);
                 try {
                     return model.getQuads(mimic, side, rand, EmptyModelData.INSTANCE);
                 } catch (Exception e) {
@@ -157,12 +157,12 @@ public class FancyBakedModel implements IDynamicBakedModel {
     }
 
     @Override
-    public ItemOverrideList getOverrides() {
-        return ItemOverrideList.EMPTY;
+    public ItemOverrides getOverrides() {
+        return ItemOverrides.EMPTY;
     }
 
     @Override
-    public ItemCameraTransforms getTransforms() {
-        return ItemCameraTransforms.NO_TRANSFORMS;
+    public ItemTransforms getTransforms() {
+        return ItemTransforms.NO_TRANSFORMS;
     }
 }

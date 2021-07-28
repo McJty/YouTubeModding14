@@ -1,17 +1,19 @@
 package com.mcjty.mytutorial.blocks;
 
 import com.mcjty.mytutorial.setup.Registration;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
-public class MagicTile extends TileEntity {
+public class MagicTile extends BlockEntity {
 
-    public MagicTile() {
-        super(Registration.MAGICBLOCK_TILE.get());
+    public MagicTile(BlockPos pos, BlockState state) {
+        super(Registration.MAGICBLOCK_TILE.get(), pos, state);
     }
 
     @Override
-    public AxisAlignedBB getRenderBoundingBox() {
-        return new AxisAlignedBB(getBlockPos(), getBlockPos().offset(1, 3, 1));
+    public AABB getRenderBoundingBox() {
+        return new AABB(getBlockPos(), getBlockPos().offset(1, 3, 1));
     }
 }

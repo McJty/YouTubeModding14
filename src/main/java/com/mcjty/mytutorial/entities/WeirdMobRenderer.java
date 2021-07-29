@@ -12,7 +12,7 @@ public class WeirdMobRenderer extends MobRenderer<WeirdMobEntity, WeirdMobModel>
     private static final ResourceLocation TEXTURE = new ResourceLocation(MyTutorial.MODID, "textures/entity/weirdmob.png");
 
     public WeirdMobRenderer(EntityRendererProvider.Context context) {
-        super(context, new WeirdMobModel(), 0.5f);
+        super(context, new WeirdMobModel(context.getModelSet().bakeLayer(WeirdMobModel.CUBE_LAYER)), 0.5f);
     }
 
     @Nullable

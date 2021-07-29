@@ -46,7 +46,6 @@ public class ModSetup {
         });
     }
 
-    @SubscribeEvent
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
         event.put(Registration.WEIRDMOB.get(), WeirdMobEntity.prepareAttributes().build());
     }

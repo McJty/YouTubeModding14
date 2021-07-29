@@ -17,9 +17,10 @@ public class MyRenderType extends RenderType {
 
     public static final RenderType OVERLAY_LINES = RenderType.create("overlay_lines",
             DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.LINES, 256,
-            true, true, // @todo check this!
+            false, false,
             RenderType.CompositeState.builder().setLineState(THICK_LINES)
                     .setLayeringState(VIEW_OFFSET_Z_LAYERING)
+                    .setShaderState(RENDERTYPE_LINES_SHADER)
                     .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                     .setTextureState(NO_TEXTURE)
                     .setDepthTestState(NO_DEPTH_TEST)

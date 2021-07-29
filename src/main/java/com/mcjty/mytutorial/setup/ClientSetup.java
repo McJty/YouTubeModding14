@@ -7,14 +7,15 @@ import com.mcjty.mytutorial.blocks.FirstBlockScreen;
 import com.mcjty.mytutorial.blocks.MagicRenderer;
 import com.mcjty.mytutorial.client.AfterLivingRenderer;
 import com.mcjty.mytutorial.client.InWorldRenderer;
+import com.mcjty.mytutorial.entities.WeirdMobModel;
 import com.mcjty.mytutorial.entities.WeirdMobRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.world.item.Item;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -39,6 +40,11 @@ public class ClientSetup {
             ItemBlockRenderTypes.setRenderLayer(Registration.FANCYBLOCK.get(), (RenderType) -> true);
             Minecraft.getInstance().getBlockColors().register(new FancyBlockColor(), Registration.FANCYBLOCK.get());
         });
+    }
+
+    @SubscribeEvent
+    public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(WeirdMobModel.CUBE_LAYER, WeirdMobModel::createBodyLayer);
     }
 
     @SubscribeEvent

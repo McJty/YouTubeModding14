@@ -1,18 +1,37 @@
 package com.mcjty.mytutorial.entities;
 
+import com.mcjty.mytutorial.MyTutorial;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.resources.ResourceLocation;
 
 public class WeirdMobModel extends EntityModel<WeirdMobEntity> {
 
-    public ModelPart body;
+    public static final String BODY = "body";
 
-    public WeirdMobModel() {
-//        List<ModelPart.Cube> cubes = Collections.singletonList(new ModelPart.Cube(-3, 14, -3, 6, 6, 6))
-//        body = new ModelPart(this, 0, 0);
-//        body.addBox(-3, 14, -3, 6, 6, 6);
+    public static ModelLayerLocation CUBE_LAYER = new ModelLayerLocation(new ResourceLocation(MyTutorial.MODID, "weirdmob"), BODY);
+
+    public static LayerDefinition createBodyLayer() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+        partdefinition.addOrReplaceChild(BODY, CubeListBuilder.create()
+                .texOffs(0, 0)
+                .addBox(-3, 14, -3, 6, 6, 6), PartPose.ZERO);
+        return LayerDefinition.create(meshdefinition, 64, 32);
+    }
+
+    private final ModelPart body;
+
+    public WeirdMobModel(ModelPart body) {
+        this.body = body;
     }
 
     @Override
@@ -21,7 +40,7 @@ public class WeirdMobModel extends EntityModel<WeirdMobEntity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrixStack, VertexConsumer iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        body.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack matrixStack, VertexConsumer builder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        body.render(matrixStack, builder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 }

@@ -29,17 +29,16 @@ public class EntityChargeProvider implements ICapabilitySerializable<CompoundTag
         if (CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY == null) {
             return new CompoundTag();
         } else {
-            // @todo
-//            return (CompoundTag) CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY.writeNBT(charge, null);
-            return new CompoundTag();
+            CompoundTag tag = new CompoundTag();
+            tag.putInt("charge", charge.getCharge());
+            return tag;
         }
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
         if (CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY != null) {
-            // @todo
-//            CapabilityEntityCharge.ENTITY_CHARGE_CAPABILITY.readNBT(charge, null, nbt);
+            charge.setCharge(nbt.getInt("charge"));
         }
     }
 }

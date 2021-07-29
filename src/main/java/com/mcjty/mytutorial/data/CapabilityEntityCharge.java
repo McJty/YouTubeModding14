@@ -12,21 +12,4 @@ public class CapabilityEntityCharge {
     public static void register() {
         CapabilityManager.INSTANCE.register(IEntityCharge.class);
     }
-
-//    public static class Storage implements Capability.IStorage<IEntityCharge> {
-//
-//        @Nullable
-//        @Override
-//        public Tag writeNBT(Capability<IEntityCharge> capability, IEntityCharge instance, Direction side) {
-//            CompoundTag tag = new CompoundTag();
-//            tag.putInt("charge", instance.getCharge());
-//            return tag;
-//        }
-//
-//        @Override
-//        public void readNBT(Capability<IEntityCharge> capability, IEntityCharge instance, Direction side, Tag nbt) {
-//            int charge = ((CompoundTag) nbt).getInt("charge");
-//            instance.setCharge(charge);
-//        }
-//    }
 }

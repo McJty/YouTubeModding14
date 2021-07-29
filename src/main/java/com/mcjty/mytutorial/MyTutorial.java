@@ -4,6 +4,7 @@ import com.mcjty.mytutorial.setup.ClientSetup;
 import com.mcjty.mytutorial.setup.Config;
 import com.mcjty.mytutorial.setup.ModSetup;
 import com.mcjty.mytutorial.setup.Registration;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -26,7 +27,9 @@ public class MyTutorial {
         Registration.init();
 
         // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ModSetup::init);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
+        IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();
+        modbus.addListener(ModSetup::init);
+        modbus.addListener(ModSetup::onAttributeCreate);
+        modbus.addListener(ClientSetup::init);
     }
 }

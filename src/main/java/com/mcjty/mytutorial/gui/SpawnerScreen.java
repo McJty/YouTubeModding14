@@ -29,11 +29,11 @@ public class SpawnerScreen extends Screen {
         int relX = (this.width - WIDTH) / 2;
         int relY = (this.height - HEIGHT) / 2;
 
-        addWidget(new Button(relX + 10, relY + 10, 160, 20, new TextComponent("Skeleton"), button -> spawn("minecraft:skeleton")));
-        addWidget(new Button(relX + 10, relY + 37, 160, 20, new TextComponent("Zombie"), button -> spawn("minecraft:zombie")));
-        addWidget(new Button(relX + 10, relY + 64, 160, 20, new TextComponent("Cow"), button -> spawn("minecraft:cow")));
-        addWidget(new Button(relX + 10, relY + 91, 160, 20, new TextComponent("Sheep"), button -> spawn("minecraft:sheep")));
-        addWidget(new Button(relX + 10, relY + 118, 160, 20, new TextComponent("Chicken"), button -> spawn("minecraft:chicken")));
+        addRenderableWidget(new Button(relX + 10, relY + 10, 160, 20, new TextComponent("Skeleton"), button -> spawn("minecraft:skeleton")));
+        addRenderableWidget(new Button(relX + 10, relY + 37, 160, 20, new TextComponent("Zombie"), button -> spawn("minecraft:zombie")));
+        addRenderableWidget(new Button(relX + 10, relY + 64, 160, 20, new TextComponent("Cow"), button -> spawn("minecraft:cow")));
+        addRenderableWidget(new Button(relX + 10, relY + 91, 160, 20, new TextComponent("Sheep"), button -> spawn("minecraft:sheep")));
+        addRenderableWidget(new Button(relX + 10, relY + 118, 160, 20, new TextComponent("Chicken"), button -> spawn("minecraft:chicken")));
     }
 
     @Override
@@ -49,6 +49,7 @@ public class SpawnerScreen extends Screen {
     @Override
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.setShaderTexture(0, GUI);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         int relX = (this.width - WIDTH) / 2;
         int relY = (this.height - HEIGHT) / 2;
         this.blit(matrixStack, relX, relY, 0, 0, WIDTH, HEIGHT);

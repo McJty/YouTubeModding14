@@ -94,7 +94,7 @@ public class TutorialChunkGenerator extends ChunkGenerator {
 
     @Override
     public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess) {
-        return CompletableFuture.completedFuture(null);
+        return CompletableFuture.completedFuture(chunkAccess);
     }
 
     @Override

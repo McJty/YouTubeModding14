@@ -4,7 +4,9 @@ import com.mcjty.mytutorial.setup.ClientSetup;
 import com.mcjty.mytutorial.setup.Config;
 import com.mcjty.mytutorial.setup.ModSetup;
 import com.mcjty.mytutorial.setup.Registration;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -30,6 +32,6 @@ public class MyTutorial {
         IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();
         modbus.addListener(ModSetup::init);
         modbus.addListener(ModSetup::onAttributeCreate);
-        modbus.addListener(ClientSetup::init);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modbus.addListener(ClientSetup::init));
     }
 }

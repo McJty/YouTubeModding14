@@ -1,5 +1,6 @@
 package com.mcjty.mytutorial.blocks;
 
+import com.mcjty.mytutorial.setup.Registration;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -48,7 +49,7 @@ public class FancyBlock extends Block implements EntityBlock {
         BlockEntity te = world.getBlockEntity(pos);
         if (te instanceof FancyBlockTile) {
             BlockState mimic = ((FancyBlockTile) te).getMimic();
-            if (mimic != null) {
+            if (mimic != null && mimic.getBlock() != Registration.FANCYBLOCK.get()) {
                 return mimic.getLightEmission(world, pos);
             }
         }
@@ -60,7 +61,7 @@ public class FancyBlock extends Block implements EntityBlock {
         BlockEntity te = reader.getBlockEntity(pos);
         if (te instanceof FancyBlockTile) {
             BlockState mimic = ((FancyBlockTile) te).getMimic();
-            if (mimic != null) {
+            if (mimic != null && mimic.getBlock() != Registration.FANCYBLOCK.get()) {
                 return mimic.getShape(reader, pos, context);
             }
         }
@@ -81,7 +82,11 @@ public class FancyBlock extends Block implements EntityBlock {
                 BlockEntity te = world.getBlockEntity(pos);
                 if (te instanceof FancyBlockTile) {
                     BlockState mimicState = ((BlockItem) item.getItem()).getBlock().defaultBlockState();
-                    ((FancyBlockTile) te).setMimic(mimicState);
+                    if (mimicState.getBlock() != this) {
+                        ((FancyBlockTile) te).setMimic(mimicState);
+                    } else {
+                        ((FancyBlockTile) te).setMimic(null);
+                    }
                 }
             }
             return InteractionResult.SUCCESS;

@@ -5,9 +5,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.Constants;
 
 import static com.mcjty.mytutorial.blocks.ComplexMultipartBlock.*;
 
@@ -47,7 +47,7 @@ public class ComplexMultipartTile extends BlockEntity {
         Mode down = getMode(Direction.DOWN);
         BlockState state = level.getBlockState(worldPosition);
         level.setBlock(worldPosition, state.setValue(NORTH, north).setValue(SOUTH, south).setValue(WEST, west).setValue(EAST, east).setValue(UP, up).setValue(DOWN, down),
-                Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                Block.UPDATE_ALL);
         setChanged();
     }
 
@@ -63,14 +63,13 @@ public class ComplexMultipartTile extends BlockEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
+    public void saveAdditional(CompoundTag compound) {
         compound.putByte("m0", (byte) modes[0].ordinal());
         compound.putByte("m1", (byte) modes[1].ordinal());
         compound.putByte("m2", (byte) modes[2].ordinal());
         compound.putByte("m3", (byte) modes[3].ordinal());
         compound.putByte("m4", (byte) modes[4].ordinal());
         compound.putByte("m5", (byte) modes[5].ordinal());
-        return super.save(compound);
     }
 
 

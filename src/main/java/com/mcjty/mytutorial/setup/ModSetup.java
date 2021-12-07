@@ -4,6 +4,7 @@ import com.mcjty.mytutorial.MyTutorial;
 import com.mcjty.mytutorial.commands.ModCommands;
 import com.mcjty.mytutorial.data.CapabilityEntityCharge;
 import com.mcjty.mytutorial.data.ChargeEventHandler;
+import com.mcjty.mytutorial.data.IEntityCharge;
 import com.mcjty.mytutorial.dimension.TutorialBiomeProvider;
 import com.mcjty.mytutorial.dimension.TutorialChunkGenerator;
 import com.mcjty.mytutorial.entities.WeirdMobEntity;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,7 +34,6 @@ public class ModSetup {
 
     public static void init(final FMLCommonSetupEvent event) {
         Networking.registerMessages();
-        CapabilityEntityCharge.register();
 
         MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, ChargeEventHandler::onAttachCapabilitiesEvent);
         MinecraftForge.EVENT_BUS.addListener(ChargeEventHandler::onAttackEvent);
@@ -54,4 +55,10 @@ public class ModSetup {
     public static void serverLoad(RegisterCommandsEvent event) {
         ModCommands.register(event.getDispatcher());
     }
+
+    @SubscribeEvent
+    public void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
+        event.register(IEntityCharge.class);
+    }
+
 }

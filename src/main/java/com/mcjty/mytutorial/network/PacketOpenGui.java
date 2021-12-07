@@ -1,7 +1,7 @@
 package com.mcjty.mytutorial.network;
 
 import com.mcjty.mytutorial.gui.SpawnerScreen;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 

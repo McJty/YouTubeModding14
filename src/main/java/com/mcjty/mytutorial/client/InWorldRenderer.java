@@ -11,15 +11,15 @@ import net.minecraft.core.BlockPos;
 import com.mojang.math.Matrix4f;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 
 public class InWorldRenderer {
 
-    public static void render(RenderWorldLastEvent event) {
+    public static void render(RenderLevelLastEvent event) {
         LocalPlayer player = Minecraft.getInstance().player;
 
         if (player.getMainHandItem().getItem() == Items.NETHER_STAR) {
-            locateTileEntities(player, event.getMatrixStack());
+            locateTileEntities(player, event.getPoseStack());
         }
     }
 

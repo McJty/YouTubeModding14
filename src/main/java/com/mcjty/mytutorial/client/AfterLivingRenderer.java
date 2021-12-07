@@ -17,7 +17,7 @@ public class AfterLivingRenderer {
         LocalPlayer player = Minecraft.getInstance().player;
 
         if (player.getMainHandItem().getItem() == Items.GHAST_TEAR) {
-            showMobs(event.getMatrixStack(), event.getBuffers(), event.getEntity());
+            showMobs(event.getPoseStack(), event.getMultiBufferSource(), event.getEntity());
         }
     }
 

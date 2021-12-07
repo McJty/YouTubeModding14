@@ -7,6 +7,7 @@ import net.minecraft.resources.RegistryLookupCodec;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 
 import java.util.Collections;
@@ -37,11 +38,6 @@ public class TutorialBiomeProvider extends BiomeSource {
     }
 
     @Override
-    public boolean canGenerateStructure(StructureFeature<?> structure) {
-        return false;
-    }
-
-    @Override
     protected Codec<? extends BiomeSource> codec() {
         return CODEC;
     }
@@ -52,7 +48,7 @@ public class TutorialBiomeProvider extends BiomeSource {
     }
 
     @Override
-    public Biome getNoiseBiome(int x, int y, int z) {
+    public Biome getNoiseBiome(int x, int y, int z, Climate.Sampler sampler) {
         return biome;
     }
 }

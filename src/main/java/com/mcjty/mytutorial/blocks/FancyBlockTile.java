@@ -5,13 +5,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,7 +32,7 @@ public class FancyBlockTile extends BlockEntity {
     public void setMimic(BlockState mimic) {
         this.mimic = mimic;
         setChanged();
-        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }
 
     public BlockState getMimic() {
@@ -54,7 +54,9 @@ public class FancyBlockTile extends BlockEntity {
         // This is actually the default but placed here so you
         // know this is the place to potentially have a lighter read() that only
         // considers things needed client-side
-        load(tag);
+        if (tag != null) {
+            load(tag);
+        }
     }
 
     // The getUpdatePacket()/onDataPacket() pair is used when a block update happens on the client
@@ -64,7 +66,7 @@ public class FancyBlockTile extends BlockEntity {
     @Nullable
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -74,7 +76,7 @@ public class FancyBlockTile extends BlockEntity {
         handleUpdateTag(tag);
         if (!Objects.equals(oldMimic, mimic)) {
             ModelDataManager.requestModelDataRefresh(this);
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
@@ -99,9 +101,8 @@ public class FancyBlockTile extends BlockEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public void saveAdditional(CompoundTag tag) {
         writeMimic(tag);
-        return super.save(tag);
     }
 
     private void writeMimic(CompoundTag tag) {

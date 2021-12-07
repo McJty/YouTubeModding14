@@ -2,6 +2,7 @@ package com.mcjty.mytutorial.items;
 
 import com.mcjty.mytutorial.setup.ModSetup;
 import com.mcjty.mytutorial.setup.Registration;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.Item;
@@ -15,7 +16,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.BaseSpawner;
-import net.minecraftforge.common.util.Constants;
 
 import java.util.Objects;
 
@@ -45,7 +45,7 @@ public class WeirdMobEggItem extends Item {
                 BaseSpawner abstractspawner = ((SpawnerBlockEntity) tileentity).getSpawner();
                 abstractspawner.setEntityId(Registration.WEIRDMOB.get());
                 tileentity.setChanged();
-                world.sendBlockUpdated(blockpos, blockstate, blockstate, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                world.sendBlockUpdated(blockpos, blockstate, blockstate, Block.UPDATE_ALL);
                 itemstack.shrink(1);
                 return InteractionResult.SUCCESS;
             }

@@ -4,6 +4,8 @@ import com.mcjty.mytutorial.MyTutorial;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.BlockPos;
@@ -12,9 +14,11 @@ import net.minecraft.resources.RegistryLookupCodec;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.levelgen.StructureSettings;
+import net.minecraft.world.level.levelgen.blending.Blender;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -51,7 +55,7 @@ public class TutorialChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void buildSurfaceAndBedrock(WorldGenRegion region, ChunkAccess chunk) {
+    public void buildSurface(WorldGenRegion region, StructureFeatureManager featureManager, ChunkAccess chunk) {
         BlockState bedrock = Blocks.BEDROCK.defaultBlockState();
         BlockState stone = Blocks.STONE.defaultBlockState();
         ChunkPos chunkpos = chunk.getPos();
@@ -93,7 +97,7 @@ public class TutorialChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess) {
+    public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender blender, StructureFeatureManager featureManager, ChunkAccess chunkAccess) {
         return CompletableFuture.completedFuture(chunkAccess);
     }
 
@@ -105,6 +109,36 @@ public class TutorialChunkGenerator extends ChunkGenerator {
     @Override
     public NoiseColumn getBaseColumn(int i, int i1, LevelHeightAccessor levelHeightAccessor) {
         return new NoiseColumn(0, new BlockState[0]);
+    }
+
+    @Override
+    public Climate.Sampler climateSampler() {
+        return (x, y, z) -> Climate.target(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+    }
+
+    @Override
+    public void applyCarvers(WorldGenRegion p_187691_, long p_187692_, BiomeManager p_187693_, StructureFeatureManager p_187694_, ChunkAccess p_187695_, GenerationStep.Carving p_187696_) {
+
+    }
+
+    @Override
+    public void spawnOriginalMobs(WorldGenRegion p_62167_) {
+
+    }
+
+    @Override
+    public int getMinY() {
+        return 0;
+    }
+
+    @Override
+    public int getGenDepth() {
+        return 256;
+    }
+
+    @Override
+    public int getSeaLevel() {
+        return 63;
     }
 
     private static class Settings {

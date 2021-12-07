@@ -1,15 +1,10 @@
 package com.mcjty.mytutorial.data;
 
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
 public class CapabilityEntityCharge {
 
-    @CapabilityInject(IEntityCharge.class)
-    public static Capability<IEntityCharge> ENTITY_CHARGE_CAPABILITY = null;
-
-    public static void register() {
-        CapabilityManager.INSTANCE.register(IEntityCharge.class);
-    }
+    public static Capability<IEntityCharge> ENTITY_CHARGE_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 }

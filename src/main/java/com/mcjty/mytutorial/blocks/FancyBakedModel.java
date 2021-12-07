@@ -103,7 +103,7 @@ public class FancyBakedModel implements IDynamicBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
 
-        RenderType layer = MinecraftForgeClient.getRenderLayer();
+        RenderType layer = MinecraftForgeClient.getRenderType();
 
         BlockState mimic = extraData.getData(FancyBlockTile.MIMIC);
         if (mimic != null && !(mimic.getBlock() instanceof FancyBlock)) {

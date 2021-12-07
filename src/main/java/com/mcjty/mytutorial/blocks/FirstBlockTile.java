@@ -7,11 +7,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -68,7 +68,7 @@ public class FirstBlockTile extends BlockEntity {
         BlockState blockState = level.getBlockState(worldPosition);
         if (blockState.getValue(BlockStateProperties.POWERED) != counter > 0) {
             level.setBlock(worldPosition, blockState.setValue(BlockStateProperties.POWERED, counter > 0),
-                    Constants.BlockFlags.NOTIFY_NEIGHBORS + Constants.BlockFlags.BLOCK_UPDATE);
+                    Block.UPDATE_ALL);
         }
 
         sendOutPower();
@@ -102,20 +102,23 @@ public class FirstBlockTile extends BlockEntity {
 
     @Override
     public void load(CompoundTag tag) {
-        itemHandler.deserializeNBT(tag.getCompound("inv"));
-        energyStorage.deserializeNBT(tag.getCompound("energy"));
+        if (tag.contains("inv")) {
+            itemHandler.deserializeNBT(tag.getCompound("inv"));
+        }
+        if (tag.contains("energy")) {
+            energyStorage.deserializeNBT(tag.get("energy"));
+        }
 
         counter = tag.getInt("counter");
         super.load(tag);
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public void saveAdditional(CompoundTag tag) {
         tag.put("inv", itemHandler.serializeNBT());
         tag.put("energy", energyStorage.serializeNBT());
 
         tag.putInt("counter", counter);
-        return super.save(tag);
     }
 
     private ItemStackHandler createHandler() {

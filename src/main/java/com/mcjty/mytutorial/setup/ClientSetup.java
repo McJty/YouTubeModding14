@@ -64,7 +64,7 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
             return;
         }
 
@@ -72,8 +72,8 @@ public class ClientSetup {
     }
 
     @SubscribeEvent
-    public void onTooltipPre(RenderTooltipEvent.Pre event) {
-        Item item = event.getStack().getItem();
+    public void onTooltipPre(RenderTooltipEvent.GatherComponents event) {
+        Item item = event.getItemStack().getItem();
         if (item.getRegistryName().getNamespace().equals(MyTutorial.MODID)) {
             event.setMaxWidth(200);
         }
